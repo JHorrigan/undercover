@@ -132,9 +132,9 @@ Builds the rest of what the team needs to see.
 - Playwright tests (no model calls; they seed decisions through the API): the queue lists 25 claims; a claim page shows its details; an over-limit approval is blocked until sign-off, then paid; the instructions page is read only.
 - The Playwright backend runs on its own fresh database (`UNDERCOVER_DB=e2e/test.db`, cleared by a small `.mjs` script before start, so it works on Windows) and never reuses the dev server's data.
 - Replace `e2e/health.spec.ts` with these.
-- Update `docs/STATUS.md` with what is built and how to run it, and add `backend/undercover.db` to `.gitignore`.
+- Update `docs/STATUS.md` with what is built and how to run it. The `*.db` rule in `.gitignore` already covers `backend/undercover.db` and `e2e/test.db`.
 
 **Success criteria**
-- [ ] `npm run e2e` passes.
-- [ ] `npm run check` passes in full.
-- [ ] `docs/STATUS.md` describes the pilot and how to run it, the agent and the dashboard.
+- [x] `npm run e2e` passes.
+- [x] `npm run check` passes in full.
+- [x] `docs/STATUS.md` describes the pilot and how to run it, the agent and the dashboard.
