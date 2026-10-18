@@ -1,0 +1,56 @@
+"""Queries over the UnderCover database."""
+
+import json
+import sqlite3
+from typing import Any
+
+SUMMARY_FIELDS = (
+    "claim_id",
+    "customer_id",
+    "claim_type",
+    "summary",
+    "amount_claimed",
+    "submitted_on",
+)
+
+
+def record(conn: sqlite3.Connection, kind: str, id_: str) -> Any:
+    """Return one seeded record, or None if it doesn't exist."""
+    row = conn.execute(
+        "SELECT body FROM records WHERE kind = ? AND id = ?", (kind, id_)
+    ).fetchone()
+    return json.loads(row["body"]) if row else None
+
+
+def records(conn: sqlite3.Connection, kind: str) -> list[Any]:
+    """Return every seeded record of one kind, in id order."""
+    rows = conn.execute(
+        "SELECT body FROM records WHERE kind = ? ORDER BY id", (kind,)
+    ).fetchall()
+    return [json.loads(row["body"]) for row in rows]
+
+
+def statuses(conn: sqlite3.Connection) -> dict[str, str]:
+    """Return each claim's status by claim id."""
+    rows = conn.execute("SELECT claim_id, status FROM claims").fetchall()
+    return {row["claim_id"]: row["status"] for row in rows}
+
+
+def claim_summaries(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    """Return the queue: one short row per claim with its status."""
+    names = {c["customer_id"]: c["name"] for c in records(conn, "customer")}
+    status = statuses(conn)
+    return [
+        {field: claim[field] for field in SUMMARY_FIELDS}
+        | {"customer_name": names[claim["customer_id"]]}
+        | {"status": status[claim["claim_id"]]}
+        for claim in records(conn, "claim")
+    ]
+
+
+def claim_detail(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | None:
+    """Return one claim in full with its status, or None if it doesn't exist."""
+    claim = record(conn, "claim", claim_id)
+    if claim is None:
+        return None
+    return claim | {"status": statuses(conn)[claim_id]}

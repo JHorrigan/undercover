@@ -54,14 +54,14 @@ Builds the SQLite store, seeds it from `data/`, and serves the records the agent
 - Read routes from the API table: `list_claims`, `get_claim`, `get_policy`, `get_customer`, `list_plans`, `list_handlers`, `get_policy_wording`, `get_instructions`.
 
 **Success criteria**
-- [ ] `uv run pytest backend` passes with tests for each read route.
-- [ ] `GET /api/claims` returns 25 claims, all `waiting`.
-- [ ] `GET /api/claims/CLM-1001` returns the claim with its story, items and documents.
-- [ ] `GET /api/claims/CLM-9999` returns 404.
-- [ ] `GET /api/policy-wording` returns the wording starting `# UnderCover Travel Insurance: Policy Wording`.
-- [ ] A test proves the seed never opens a path under `data/evals/` or `data/security/`, and no route returns a claim from either.
-- [ ] Every route in `app.openapi()` has an `operation_id` and a summary, checked by a test.
-- [ ] `npm run check:python` passes.
+- [x] `uv run pytest backend` passes with tests for each read route.
+- [x] `GET /api/claims` returns 25 claims, all `waiting`.
+- [x] `GET /api/claims/CLM-1001` returns the claim with its story, items and documents.
+- [x] `GET /api/claims/CLM-9999` returns 404.
+- [x] `GET /api/policy-wording` returns the wording starting `# UnderCover Travel Insurance: Policy Wording`.
+- [x] A test proves the seed never opens a path under `data/evals/` or `data/security/`, and no route returns a claim from either.
+- [x] Every route in `app.openapi()` has an `operation_id` and a summary, checked by a test.
+- [x] `npm run check:python` passes.
 
 ## Phase 2: Decisions, payments and the sign-off rule
 
