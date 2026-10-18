@@ -90,11 +90,11 @@ Replaces the hello-world agent with one that decides claims.
 - `uv run -m agent CLM-1001` runs one claim from the command line.
 
 **Success criteria**
-- [ ] Tests with a stub model: a scripted run reads the claim, records an approve, pays, and leaves the claim `decided` with steps logged.
-- [ ] A stubbed run that tries to pay $1,500 gets the 403 message back and the claim stays `awaiting_signoff` with no payment.
-- [ ] A test proves no agent tool takes a path or reaches anything outside the backend's API.
-- [ ] Live check (one claim, a few cents, or free with `MODEL_NAME=openrouter/free`): `uv run -m agent CLM-1001` records a decision with a reason and a policy section, visible at `GET /api/claims/CLM-1001`.
-- [ ] `npm run check:python` passes.
+- [x] Tests with a stub model: a scripted run reads the claim, records an approve, pays, and leaves the claim `decided` with steps logged.
+- [x] A stubbed run that tries to pay $1,500 gets the 403 message back and the claim stays `awaiting_signoff` with no payment.
+- [x] A test proves no agent tool takes a path or reaches anything outside the backend's API.
+- [x] Live check (one claim, a few cents, or free with `MODEL_NAME=openrouter/free`): `uv run -m agent CLM-1001` records a decision with a reason and a policy section, visible at `GET /api/claims/CLM-1001`.
+- [x] `npm run check:python` passes.
 
 ## Phase 4: Dashboard, brand and queue
 
