@@ -47,7 +47,11 @@ export interface Claim {
   status: Status;
   decision: Decision | null;
   payment: { amount: number; paid_at: string } | null;
-  sign_off: { handler_id: string; signed_at: string } | null;
+  sign_off: {
+    handler_id: string;
+    handler_name: string;
+    signed_at: string;
+  } | null;
 }
 
 export interface Policy {
@@ -90,6 +94,10 @@ export interface Step {
   at: string;
   kind: "tool" | "result" | "reply";
   text: string;
+}
+
+export function errorMessage(reason: unknown): string {
+  return reason instanceof Error ? reason.message : String(reason);
 }
 
 async function read(response: Response): Promise<Response> {

@@ -121,11 +121,11 @@ Builds the rest of what the team needs to see.
 - Instructions page: the agent's instructions, read only.
 
 **Success criteria**
-- [ ] Vitest tests for the claim page, the steps list, the sign-off form and the instructions page.
-- [ ] In the browser: CLM-1001 shows its story, items and documents; the instructions page shows the instructions with no way to edit them.
-- [ ] In the browser, with a live run on one claim: the steps appear one by one and the decision shows when it is done.
-- [ ] In the browser, for a claim the agent approved over $1,000: the page shows "Waiting for sign-off" with no payment, and after sign-off it shows the payment and `decided`.
-- [ ] `npm run check:ts` passes.
+- [x] Vitest tests for the claim page, the steps list, the sign-off form and the instructions page.
+- [x] In the browser: CLM-1001 shows its story, items and documents; the instructions page shows the instructions with no way to edit them.
+- [x] In the browser, with a live run on one claim: the steps appear one by one and the decision shows when it is done.
+- [x] In the browser, for a claim the agent approved over $1,000: the page shows "Waiting for sign-off" with no payment, and after sign-off it shows the payment and `decided`.
+- [x] `npm run check:ts` passes.
 
 ## Phase 6: End-to-end tests and wrap-up
 

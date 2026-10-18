@@ -57,8 +57,16 @@ def claim_detail(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | No
         "status": statuses(conn)[claim_id],
         "decision": row_for(conn, "decisions", claim_id),
         "payment": row_for(conn, "payments", claim_id),
-        "sign_off": row_for(conn, "sign_offs", claim_id),
+        "sign_off": sign_off(conn, claim_id),
     }
+
+
+def sign_off(conn: sqlite3.Connection, claim_id: str) -> Any:
+    """Return a claim's sign-off with the handler's name, or None."""
+    row = row_for(conn, "sign_offs", claim_id)
+    if row is None:
+        return None
+    return row | {"handler_name": record(conn, "handler", row["handler_id"])["name"]}
 
 
 def row_for(conn: sqlite3.Connection, table: str, claim_id: str) -> Any:

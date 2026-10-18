@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { errorMessage } from "./api";
 
 export type Route =
   { page: "queue" } | { page: "claim"; id: string } | { page: "instructions" };
@@ -44,7 +45,7 @@ export function useData<T>(
         setError(undefined);
       },
       (reason: unknown) => {
-        setError(reason instanceof Error ? reason.message : String(reason));
+        setError(errorMessage(reason));
       },
     );
   }, [load]);

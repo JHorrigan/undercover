@@ -62,6 +62,7 @@ def test_sign_off_pays_and_decides(client):
     assert claim["status"] == "decided"
     assert claim["payment"]["amount"] == 1500.0
     assert claim["sign_off"]["handler_id"] == "HND-01"
+    assert claim["sign_off"]["handler_name"] == "Dana Whitfield"
     assert pay(client, 1500.0).status_code == 409
 
 
