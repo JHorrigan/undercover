@@ -29,6 +29,16 @@ When asked to implement the plan, as in "Please implement the plan for the pilot
 
 When the last phase is done, run `npm run check` and report the results.
 
+## Fixing bugs
+
+When something fails, find the root cause before you change any code:
+
+1. Reproduce it with a failing test or a command, and note the exact error.
+2. Prove the cause with evidence, such as a log line, a value or a stack trace. Don't guess.
+3. Fix the cause, not the symptom. No workarounds, retries or broad exception handlers to hide it.
+4. Check the failing test now passes, run `npm run check`, and commit the test with the fix.
+5. If you can't prove the cause after two attempts, stop and report what you tried.
+
 ## Rules
 
 - Add tests with each change. Tests never call a model; use a stub model.
