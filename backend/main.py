@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from backend import reads
+from backend import actions, reads
 from backend.db import connect, create_schema
 from backend.seed import seed
 
@@ -22,6 +22,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(title="UnderCover", lifespan=lifespan)
 app.include_router(reads.router)
+app.include_router(actions.router)
 
 
 @app.get("/api/health", operation_id="health")

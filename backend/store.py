@@ -53,4 +53,23 @@ def claim_detail(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | No
     claim = record(conn, "claim", claim_id)
     if claim is None:
         return None
-    return claim | {"status": statuses(conn)[claim_id]}
+    return claim | {
+        "status": statuses(conn)[claim_id],
+        "decision": row_for(conn, "decisions", claim_id),
+        "payment": row_for(conn, "payments", claim_id),
+        "sign_off": row_for(conn, "sign_offs", claim_id),
+    }
+
+
+def row_for(conn: sqlite3.Connection, table: str, claim_id: str) -> Any:
+    """Return a claim's row from one outcome table as a dict, or None."""
+    row = conn.execute(
+        f"SELECT * FROM {table} WHERE claim_id = ?",  # noqa: S608
+        (claim_id,),
+    ).fetchone()
+    return dict(row) if row else None
+
+
+def payout_limit(conn: sqlite3.Connection) -> float:
+    """Return the payout above which a handler must sign off."""
+    return record(conn, "company", "settings")["payout_approval_limit"]

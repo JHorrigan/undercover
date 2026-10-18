@@ -37,6 +37,7 @@ Every operation has an `operation_id`, a one-line docstring and no optional inpu
 | `POST /api/claims/{claim_id}/sign-off` | `sign_off_claim` | dashboard |
 | `GET /api/claims/{claim_id}/steps` | `list_steps` | dashboard |
 | `POST /api/claims/{claim_id}/steps` | `add_step` | agent runner |
+| `POST /api/claims/{claim_id}/start` | `start_claim` | agent runner |
 | `POST /api/claims/{claim_id}/run` | `run_agent` | dashboard |
 | `GET /api/handlers` | `list_handlers` | dashboard |
 
@@ -74,9 +75,9 @@ Builds the write operations and the $1,000 rule.
 - `get_claim` now includes the decision, the payment, the sign-off and the latest status.
 
 **Success criteria**
-- [ ] Tests cover: approve under the limit then pay succeeds; approve over the limit sets `awaiting_signoff`; paying over the limit before sign-off returns 403 and no payment is stored; sign-off pays and sets `decided`; double decision returns 409; paying the wrong amount returns 422; paying twice returns 409.
-- [ ] With `curl`, `POST /api/claims/CLM-1001/payment` with `{"amount": 1500}` after an approve of $1,500 returns 403.
-- [ ] `npm run check:python` passes with coverage of 80% or more.
+- [x] Tests cover: approve under the limit then pay succeeds; approve over the limit sets `awaiting_signoff`; paying over the limit before sign-off returns 403 and no payment is stored; sign-off pays and sets `decided`; double decision returns 409; paying the wrong amount returns 422; paying twice returns 409.
+- [x] With `curl`, `POST /api/claims/CLM-1001/payment` with `{"amount": 1500}` after an approve of $1,500 returns 403.
+- [x] `npm run check:python` passes with coverage of 80% or more.
 
 ## Phase 3: The UnderCover Agent
 
