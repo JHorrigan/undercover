@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
+import { useRoute } from "./hooks";
+import { Queue } from "./Queue";
 
 export function App() {
-  const [status, setStatus] = useState("checking");
-
-  useEffect(() => {
-    void fetch("/api/health")
-      .then((response) => (response.ok ? "up" : "down"))
-      .catch(() => "down")
-      .then(setStatus);
-  }, []);
-
+  const route = useRoute();
   return (
-    <main>
-      <h1>UnderCover</h1>
-      <p>Backend: {status}</p>
-    </main>
+    <>
+      <header className="topbar">
+        <a className="wordmark" href="#/">
+          UnderCover
+        </a>
+        <nav aria-label="Main">
+          <a
+            href="#/"
+            aria-current={route.page === "queue" ? "page" : undefined}
+          >
+            Queue
+          </a>
+        </nav>
+      </header>
+      <main>
+        <Queue />
+      </main>
+    </>
   );
 }

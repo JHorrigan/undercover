@@ -1,0 +1,262 @@
+:root {
+  --blue: #2962ff;
+  --cyan: #22d3ee;
+  --lavender: #b197fc;
+  --mint: #3dd6a0;
+  --coral: #ff7a7a;
+  --ink: #0b1020;
+  --ink-muted: #4b5466;
+  --page: #f3f1ea;
+  --panel: #ffffff;
+  --sunken: #e7e4da;
+  --action: var(--blue);
+  --on-action: #ffffff;
+  --link: #2446c8;
+
+  --font-display: "Archivo", sans-serif;
+  --font-body: "Instrument Sans", sans-serif;
+  --font-quote: "Instrument Serif", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius-panel: 14px;
+  --radius-pill: 999px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #edf1f7;
+    --ink-muted: #97a3b8;
+    --page: #070b14;
+    --panel: #0d1424;
+    --sunken: #1c2740;
+    --action: #7c9cff;
+    --on-action: #0b1020;
+    --link: #7c9cff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 16px/1.5 var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+a {
+  color: var(--link);
+}
+
+:focus-visible {
+  outline: 3px solid var(--action);
+  outline-offset: 2px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+/* Shell */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem clamp(1rem, 4vw, 3rem);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.topbar nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.topbar nav a[aria-current="page"] {
+  color: var(--ink);
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem clamp(1rem, 4vw, 3rem) 4rem;
+}
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: var(--radius-panel);
+  padding: 1.5rem;
+}
+
+.error {
+  color: var(--ink);
+  background: var(--coral);
+  border-radius: var(--radius-panel);
+  padding: 0.75rem 1rem;
+}
+
+/* Status */
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border-radius: var(--radius-pill);
+  color: #0b1020;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-waiting {
+  background: var(--lavender);
+}
+
+.status-in_progress {
+  background: var(--cyan);
+}
+
+.status-awaiting_signoff {
+  background: var(--coral);
+}
+
+.status-decided {
+  background: var(--mint);
+}
+
+.status-bar {
+  display: flex;
+  gap: 4px;
+  height: 14px;
+  margin-bottom: 0.75rem;
+}
+
+.status-bar span {
+  border-radius: var(--radius-pill);
+  transition: flex-grow 600ms ease;
+}
+
+.status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.status-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-legend .count {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Queue */
+
+.queue {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.queue th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.queue td {
+  padding: 0.75rem;
+  vertical-align: top;
+}
+
+.queue tbody tr:nth-child(odd) td {
+  background: var(--page);
+}
+
+.queue tbody tr td:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.queue tbody tr td:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+.queue .amount {
+  text-align: right;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

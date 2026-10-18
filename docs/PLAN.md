@@ -106,9 +106,9 @@ Builds the look and the first screen.
 - Queue page: a table of claims with id, customer, type, amount claimed, submitted date and a status badge, plus a count for each status. Badge colors: waiting Lavender, in progress Cyan, awaiting sign-off Coral Red, decided Mint.
 
 **Success criteria**
-- [ ] Vitest tests for the queue page and status badges with a mocked fetch.
-- [ ] In the browser with the Playwright MCP server: the queue shows 25 claims with their status, in light and dark mode, and screenshots match the brand.
-- [ ] `npm run check:ts` passes with coverage of 80% or more.
+- [x] Vitest tests for the queue page and status badges with a mocked fetch.
+- [x] In the browser with the Playwright MCP server: the queue shows 25 claims with their status, in light and dark mode, and screenshots match the brand.
+- [x] `npm run check:ts` passes with coverage of 80% or more.
 
 ## Phase 5: Claim page, live steps, sign-off and instructions
 
