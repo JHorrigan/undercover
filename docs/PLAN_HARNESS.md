@@ -71,12 +71,12 @@ Seeds the claims manual, serves both documents by section, and makes DeepSeek V4
 - `describe()` logs a `read_section` call as a step of kind `read`, such as `Claims manual 9. Repeat claims`.
 
 **Success criteria**
-- [ ] `uv run pytest backend agent` passes, with tests that the wording splits into 12 sections and the manual into 14, that `read_section` returns one section's text, and that an unknown section is 404.
-- [ ] `GET /api/documents` returns both documents with numbers and titles; `GET /api/documents/claims_manual/sections/9` returns "9. Repeat claims" and nothing from section 10.
-- [ ] `GET /api/policy-wording` is 404.
-- [ ] A test on a stub model shows a `read_section` call logged as a `read` step.
-- [ ] A test shows `model()` uses `deepseek/deepseek-v4.1-flash` with low effort, and `MODEL_NAME` when set.
-- [ ] The seeding test still proves `data/evals/` is never read.
+- [x] `uv run pytest backend agent` passes, with tests that the wording splits into 12 sections and the manual into 14, that `read_section` returns one section's text, and that an unknown section is 404.
+- [x] `GET /api/documents` returns both documents with numbers and titles; `GET /api/documents/claims_manual/sections/9` returns "9. Repeat claims" and nothing from section 10.
+- [x] `GET /api/policy-wording` is 404.
+- [x] A test on a stub model shows a `read_section` call logged as a `read` step.
+- [x] A test shows `model()` uses `deepseek/deepseek-v4.1-flash` with low effort, and `MODEL_NAME` when set.
+- [x] The seeding test still proves `data/evals/` is never read.
 
 ## Phase 2: Runs, the cap, the to-do list and recovery in the backend
 

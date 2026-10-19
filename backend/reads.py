@@ -1,4 +1,4 @@
-"""Read operations: the queue, the records and the documents."""
+"""Read operations: the queue, the records and the instructions."""
 
 import sqlite3
 from pathlib import Path
@@ -57,16 +57,6 @@ def list_plans(db: Db) -> dict[str, Any]:
 def list_handlers(db: Db) -> list[dict[str, Any]]:
     """List the claims handlers."""
     return store.records(db, "handler")
-
-
-@router.get(
-    "/policy-wording",
-    operation_id="get_policy_wording",
-    response_class=PlainTextResponse,
-)
-def get_policy_wording(db: Db) -> str:
-    """Get the policy wording, the contract with the customer, as Markdown."""
-    return store.record(db, "wording", "policy")
 
 
 @router.get(

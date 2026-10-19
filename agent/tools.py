@@ -46,10 +46,22 @@ def list_plans() -> str:
     return call("GET", "/api/plans")
 
 
+DOCUMENT_NAMES = {"policy_wording": "Policy wording", "claims_manual": "Claims manual"}
+
+
 @tool
-def get_policy_wording() -> str:
-    """Get the policy wording, the contract with the customer."""
-    return call("GET", "/api/policy-wording")
+def list_documents() -> str:
+    """List the numbered sections of the policy wording and the claims manual."""
+    return call("GET", "/api/documents")
+
+
+@tool
+def read_section(
+    document: Literal["policy_wording", "claims_manual"], section: str
+) -> str:
+    """Read one numbered section of the policy wording or the claims manual."""
+    text = call("GET", f"/api/documents/{document}/sections/{section}")
+    return f"{DOCUMENT_NAMES[document]}\n{text}"
 
 
 @tool
@@ -81,7 +93,8 @@ TOOLS = [
     get_policy,
     get_customer,
     list_plans,
-    get_policy_wording,
+    list_documents,
+    read_section,
     record_decision,
     pay_claim,
 ]

@@ -42,10 +42,29 @@ def test_plans_and_handlers(client):
     assert [h["handler_id"] for h in handlers] == ["HND-01", "HND-02", "HND-03"]
 
 
-def test_documents(client):
-    wording = client.get("/api/policy-wording").text
-    assert wording.startswith("# UnderCover Travel Insurance: Policy Wording")
+def test_instructions(client):
     assert client.get("/api/instructions").text.startswith("# UnderCover Agent")
+
+
+def test_list_documents(client):
+    documents = client.get("/api/documents").json()
+    assert len(documents["policy_wording"]) == 12
+    assert len(documents["claims_manual"]) == 14
+    assert documents["claims_manual"][8] == {"section": "9", "title": "Repeat claims"}
+
+
+def test_read_section(client):
+    text = client.get("/api/documents/claims_manual/sections/9").text
+    assert text.startswith("## 9. Repeat claims")
+    assert "## 10." not in text
+    last = client.get("/api/documents/policy_wording/sections/12").text
+    assert last.startswith("## 12. Definitions")
+
+
+def test_unknown_sections_are_404(client):
+    assert client.get("/api/documents/claims_manual/sections/99").status_code == 404
+    assert client.get("/api/documents/evals/sections/1").status_code == 422
+    assert client.get("/api/policy-wording").status_code == 404
 
 
 def test_seed_never_opens_evals_or_security(client, monkeypatch, tmp_path):

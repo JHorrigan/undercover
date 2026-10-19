@@ -3,9 +3,9 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, ToolMessage
 
-from agent import main, tools
+from agent import main, model, tools
 from backend import runs
 from backend.main import app
 
@@ -86,7 +86,11 @@ def test_tools_read_records():
     assert '"plan":"premium"' in tools.get_policy.invoke({"policy_id": "POL-2001"})
     assert "Maya Patel" in tools.get_customer.invoke({"customer_id": "CUS-3001"})
     assert "economy" in tools.list_plans.invoke({})
-    assert "Policy Wording" in tools.get_policy_wording.invoke({})
+    assert "Repeat claims" in tools.list_documents.invoke({})
+    section = {"document": "claims_manual", "section": "9"}
+    assert tools.read_section.invoke(section).startswith(
+        "Claims manual\n## 9. Repeat claims"
+    )
     assert tools.get_claim.invoke({"claim_id": "CLM-9999"}).startswith("Error 404")
 
 
@@ -110,6 +114,23 @@ def test_run_agent_route(monkeypatch, client):
 def test_model_name(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
     monkeypatch.delenv("MODEL_NAME", raising=False)
-    assert main.model().model_name == "openai/gpt-6-luna"
+    default = model.model()
+    assert default.model_name == "deepseek/deepseek-v4.1-flash"
+    assert default.reasoning_effort == "low"
     monkeypatch.setenv("MODEL_NAME", "openrouter/free")
-    assert main.model().model_name == "openrouter/free"
+    assert model.model().model_name == "openrouter/free"
+
+
+def test_section_read_is_a_read_step():
+    message = ToolMessage(
+        content="Claims manual\n## 9. Repeat claims\nText.",
+        name="read_section",
+        tool_call_id="1",
+    )
+    assert main.describe(message) == [("read", "Claims manual: 9. Repeat claims")]
+    missing = ToolMessage(
+        content="Claims manual\nError 404: missing",
+        name="read_section",
+        tool_call_id="2",
+    )
+    assert main.describe(missing)[0][0] == "result"

@@ -16,6 +16,7 @@ KEYED_FILES = {
     "customer": ("customers.json", "customer_id"),
     "handler": ("handlers.json", "handler_id"),
 }
+DOCUMENTS = ("policy_wording", "claims_manual")
 
 
 def read_json(name: str) -> Any:
@@ -41,8 +42,10 @@ def seed(conn: sqlite3.Connection) -> None:
     plans = read_json("plans.json")
     insert(conn, "plans", "all", plans)
     insert(conn, "company", "settings", read_json("company.json"))
-    wording = (DATA / "policy_wording.md").read_text(encoding="utf-8")
-    insert(conn, "wording", "policy", wording)
+    for name in DOCUMENTS:
+        insert(
+            conn, "document", name, (DATA / f"{name}.md").read_text(encoding="utf-8")
+        )
     conn.executemany(
         "INSERT INTO claims (claim_id, status) VALUES (?, 'waiting')",
         [

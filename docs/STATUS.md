@@ -2,6 +2,8 @@
 
 The claims pilot from `docs/PLAN.md` is built: all six phases are done and `npm run check` passes.
 
+The harness from `docs/PLAN_HARNESS.md` is in progress: phase 1 is done (documents by section, the claims manual, DeepSeek V4.1 Flash by default).
+
 ## What's built
 
 - **Backend** (`backend/`): FastAPI on SQLite at `backend/undercover.db`, or the path in `UNDERCOVER_DB`. It is seeded on startup from the files in `data/` listed in `backend/seed.py`, never from `data/evals/` or `data/security/`.

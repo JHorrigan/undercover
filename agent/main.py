@@ -1,38 +1,30 @@
 """The UnderCover Agent."""
 
-import os
 from typing import Any
 
-from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, ToolMessage
-from langchain_openai import ChatOpenAI
-from pydantic import SecretStr
 
 from agent import tools
+from agent.model import model
 
-load_dotenv(override=True)
-
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_MODEL = "openai/gpt-6-luna"
 RESULT_CHARS = 300
 
 
-def model() -> ChatOpenAI:
-    """Return the model named in MODEL_NAME, or GPT-6 Luna by default."""
-    name = os.getenv("MODEL_NAME")
-    return ChatOpenAI(
-        model=name or DEFAULT_MODEL,
-        base_url=OPENROUTER_BASE_URL,
-        api_key=SecretStr(os.environ["OPENROUTER_API_KEY"]),
-        reasoning_effort=None if name else "low",
-    )
+def section_read(message: ToolMessage) -> str | None:
+    """Return 'Claims manual: 9. Repeat claims' for a section the agent read."""
+    document, _, text = message.text.partition("\n## ")
+    if message.name != "read_section" or not text:
+        return None
+    return f"{document}: {text.splitlines()[0]}"
 
 
 def describe(message: BaseMessage) -> list[tuple[str, str]]:
     """Turn one agent message into steps for the dashboard, as (kind, text)."""
     if isinstance(message, ToolMessage):
+        if read := section_read(message):
+            return [("read", read)]
         return [("result", f"{message.name}: {message.text[:RESULT_CHARS]}")]
     if isinstance(message, AIMessage) and message.tool_calls:
         return [("tool", f"{c['name']} {c['args']}") for c in message.tool_calls]
