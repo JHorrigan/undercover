@@ -2,9 +2,8 @@ import { useState } from "react";
 import type { Run, Todo } from "./api";
 import { api, errorMessage } from "./api";
 import { TODO_LABEL, TODO_STATUSES } from "./format";
-import { useData } from "./hooks";
+import { REFRESH_MS, useData } from "./hooks";
 
-const REFRESH_MS = 3000;
 const DEFAULT_CAP = 5;
 
 /** The agent's run over the queue: start one, then watch its to-do list. */
@@ -60,7 +59,6 @@ function StartRun({ onStarted }: Readonly<{ onStarted: () => void }>) {
         id="cap"
         type="number"
         min={1}
-        max={25}
         value={cap}
         onChange={(event) => {
           setCap(Number(event.target.value));

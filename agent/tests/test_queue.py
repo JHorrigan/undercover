@@ -1,16 +1,8 @@
-import pytest
 from langchain_core.messages import AIMessage
 
-from agent import queue, runs
+from agent import backend, harness
 from agent.tests.conftest import broken_claim, call_tool, decide, stub
 from backend import run_routes
-
-
-@pytest.fixture(autouse=True)
-def no_retry_wait(monkeypatch):
-    monkeypatch.setattr(
-        "langchain.agents.middleware.model_retry.time.sleep", lambda _: None
-    )
 
 
 def todos(*items):
@@ -28,8 +20,16 @@ def finish(summary="Two claims decided."):
     return call_tool("finish_run", {"summary": summary})
 
 
+def claim(claim_id):
+    return backend.data("GET", f"/api/claims/{claim_id}")
+
+
 def status(claim_id):
-    return runs.get_claim(claim_id)["status"]
+    return claim(claim_id)["status"]
+
+
+def latest_run():
+    return backend.data("GET", "/api/runs/latest")
 
 
 def test_cap_leaves_the_rest_waiting(use_test_backend):
@@ -44,13 +44,13 @@ def test_cap_leaves_the_rest_waiting(use_test_backend):
         AIMessage(content="Finished."),
     )
     claims = stub(*decide("CLM-1001"), *decide("CLM-1002", 0, "decline"))
-    assert queue.run_queue(2, plan, claims) == "Two claims decided."
+    assert harness.run_queue(2, plan, claims) == "Two claims decided."
     queue_list = use_test_backend.get("/api/claims").json()
     decided = [c["claim_id"] for c in queue_list if c["status"] == "decided"]
     assert decided == ["CLM-1001", "CLM-1002"]
     assert sum(c["status"] == "waiting" for c in queue_list) == 23
     assert status("CLM-1003") == "waiting"
-    run = runs.latest_run()
+    run = latest_run()
     assert run["todos"] == [
         {"text": "Work CLM-1001", "status": "done"},
         {"text": "Work CLM-1002", "status": "done"},
@@ -66,11 +66,11 @@ def test_failed_claim_does_not_stop_the_run_and_is_tried_again():
         AIMessage(content="."),
     )
     claims = stub(*broken_claim(), *decide("CLM-1002"), *decide("CLM-1001"))
-    queue.run_queue(2, plan, claims)
+    harness.run_queue(2, plan, claims)
     assert status("CLM-1002") == "decided"
     assert status("CLM-1001") == "decided"
-    assert runs.get_claim("CLM-1001")["failures"] == 1
-    assert runs.latest_run()["summary"] == "Two claims decided."
+    assert claim("CLM-1001")["failures"] == 1
+    assert latest_run()["summary"] == "Two claims decided."
 
 
 def test_claim_failing_twice_is_left_for_a_handler():
@@ -81,9 +81,9 @@ def test_claim_failing_twice_is_left_for_a_handler():
         finish("CLM-1001 left for a handler."),
         AIMessage(content="."),
     )
-    queue.run_queue(1, plan, stub(*broken_claim(), *broken_claim()))
+    harness.run_queue(1, plan, stub(*broken_claim(), *broken_claim()))
     assert status("CLM-1001") == "needs_handler"
-    assert runs.latest_run()["todos"][0]["status"] == "for_handler"
+    assert latest_run()["todos"][0]["status"] == "for_handler"
 
 
 def test_missed_claims_are_caught_before_finishing():
@@ -94,9 +94,9 @@ def test_missed_claims_are_caught_before_finishing():
         finish(),
         AIMessage(content="."),
     )
-    queue.run_queue(2, plan, stub(*decide("CLM-1001"), *decide("CLM-1002")))
+    harness.run_queue(2, plan, stub(*decide("CLM-1001"), *decide("CLM-1002")))
     assert status("CLM-1002") == "decided"
-    assert runs.latest_run()["summary"] == "Two claims decided."
+    assert latest_run()["summary"] == "Two claims decided."
 
 
 def test_agent_that_stops_early_is_reminded():
@@ -106,26 +106,26 @@ def test_agent_that_stops_early_is_reminded():
         finish("One claim decided."),
         AIMessage(content="."),
     )
-    assert queue.run_queue(1, plan, stub(*decide("CLM-1001"))) == "One claim decided."
+    assert harness.run_queue(1, plan, stub(*decide("CLM-1001"))) == "One claim decided."
 
 
 def test_run_that_never_finishes_is_stopped():
     plan = stub(*[AIMessage(content="All done.")] * 3)
-    assert queue.run_queue(1, plan, stub()) == "Stopped before finishing"
-    assert runs.latest_run()["finished_at"]
+    assert harness.run_queue(1, plan, stub()) == "Stopped before finishing"
+    assert latest_run()["finished_at"]
 
 
 def test_start_run_route(monkeypatch, use_test_backend):
     started = []
-    monkeypatch.setattr(run_routes.queue, "run_queue", started.append)
+    monkeypatch.setattr(run_routes.harness, "run_queue", started.append)
     response = use_test_backend.post("/api/runs/start", json={"cap": 1})
     assert response.json() == {"status": "started"}
     assert started == [1]
-    runs.create_run(1)
+    harness.new_run(1)
     assert use_test_backend.post("/api/runs/start", json={"cap": 1}).status_code == 409
 
 
 def test_queue_instructions():
-    text = queue.tools.call("GET", "/api/instructions/queue")
+    text = harness.instructions("queue")
     assert text.startswith("# Running the queue")
     assert "finish_run" in text

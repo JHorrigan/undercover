@@ -6,8 +6,7 @@ from typing import Any, Literal
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, Field
 
-from agent import claim as agent
-from agent import queue
+from agent import harness
 from backend import run_store, store
 from backend.db import Db
 from backend.reads import found
@@ -106,7 +105,7 @@ def start_run(new_run: NewRun, tasks: BackgroundTasks, db: Db) -> dict[str, str]
     """Start the queue agent on the waiting claims up to a cap, in the background."""
     if run_store.running(db):
         raise HTTPException(409, "A run is already going")
-    tasks.add_task(queue.run_queue, new_run.cap)
+    tasks.add_task(harness.run_queue, new_run.cap)
     return {"status": "started"}
 
 
@@ -117,5 +116,5 @@ def run_agent(claim_id: str, tasks: BackgroundTasks, db: Db) -> dict[str, str]:
         raise HTTPException(409, "Only a waiting claim can be run")
     if run_store.running(db):
         raise HTTPException(409, "A run is already going")
-    tasks.add_task(agent.run_one, claim_id)
+    tasks.add_task(harness.run_one, claim_id)
     return {"status": "started"}

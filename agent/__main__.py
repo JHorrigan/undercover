@@ -1,11 +1,16 @@
-"""Run the UnderCover Agent: uv run -m agent CLM-1001, or uv run -m agent --cap 5."""
+"""Run the UnderCover Agent: uv run -m agent --cap 5, or uv run -m agent CLM-1001."""
 
-import sys
+import argparse
 
-from agent.claim import run_one
-from agent.queue import run_queue
+from agent.harness import run_one, run_queue
 
-if sys.argv[1] == "--cap":
-    print(run_queue(int(sys.argv[2])))
+parser = argparse.ArgumentParser(prog="uv run -m agent")
+parser.add_argument("claim_id", nargs="?", help="work one named claim")
+parser.add_argument("--cap", type=int, help="work the queue, up to this many claims")
+args = parser.parse_args()
+if args.cap:
+    print(run_queue(args.cap))
+elif args.claim_id:
+    print(run_one(args.claim_id))
 else:
-    print(run_one(sys.argv[1]))
+    parser.error("give a claim id or --cap")

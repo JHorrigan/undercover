@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
 from langchain_core.messages import AIMessage
 
-from agent import tools
+from agent import backend as api
 from backend.main import app
 
 MODEL_ERROR = "<model error>"
@@ -40,29 +40,33 @@ def stub(*messages):
 
 
 def decide(claim_id, payout=420.0, decision="approve"):
-    """A claim agent's script: read the claim and a section, decide, pay, reply."""
+    """A claim agent's script: read the claim and two sections, decide, pay, reply."""
     body = {
-        "claim_id": claim_id,
         "decision": decision,
         "payout": payout,
         "reason": "A covered delay with receipts.",
         "policy_section": "3. Trip Delay",
     }
     messages = [
-        call_tool("get_claim", {"claim_id": claim_id}),
+        call_tool("get_claim", {}),
         call_tool("read_section", {"document": "policy_wording", "section": "3"}),
         call_tool("read_section", {"document": "claims_manual", "section": "10"}),
         call_tool("record_decision", body),
     ]
     if decision == "approve":
-        messages.append(
-            call_tool("pay_claim", {"claim_id": claim_id, "amount": payout})
-        )
+        messages.append(call_tool("pay_claim", {"amount": payout}))
     return [*messages, AIMessage(content=f"{claim_id}: {decision}.")]
 
 
 @pytest.fixture(autouse=True)
 def use_test_backend(monkeypatch):
     with TestClient(app) as started:
-        monkeypatch.setattr(tools, "backend", lambda: nullcontext(started))
+        monkeypatch.setattr(api, "client", lambda: nullcontext(started))
         yield started
+
+
+@pytest.fixture(autouse=True)
+def no_retry_wait(monkeypatch):
+    monkeypatch.setattr(
+        "langchain.agents.middleware.model_retry.time.sleep", lambda _: None
+    )

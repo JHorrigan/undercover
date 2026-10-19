@@ -25,6 +25,9 @@ export function useRoute(): Route {
   return route;
 }
 
+/** How often the live pages ask the backend for news. */
+export const REFRESH_MS = 3000;
+
 export interface Loaded<T> {
   data: T | undefined;
   error: string | undefined;

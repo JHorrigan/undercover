@@ -12,7 +12,7 @@ export default defineConfig({
       command:
         "node e2e/fresh-db.mjs && uv run -m uvicorn backend.main:app --port 8100",
       url: `${API}/api/health`,
-      env: { UNDERCOVER_DB: "e2e/test.db" },
+      env: { UNDERCOVER_DB: "e2e/test.db", UNDERCOVER_API: API },
       reuseExistingServer: false,
     },
     {

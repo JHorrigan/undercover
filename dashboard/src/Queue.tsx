@@ -1,10 +1,8 @@
 import { api } from "./api";
 import { humanize, money } from "./format";
-import { useData } from "./hooks";
+import { REFRESH_MS, useData } from "./hooks";
 import { RunPanel } from "./RunPanel";
 import { StatusBadge, StatusBar } from "./Status";
-
-const REFRESH_MS = 3000;
 
 export function Queue() {
   const { data: claims, error } = useData(api.claims, REFRESH_MS);
