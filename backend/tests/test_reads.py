@@ -14,15 +14,13 @@ def test_list_claims(client):
     assert first["customer_name"] == "Maya Patel"
 
 
-def test_list_claims_by_status(client):
+def test_list_waiting_claims(client):
     client.post("/api/runs", json={"cap": 1})
     run_id = client.get("/api/runs/latest").json()["run_id"]
     client.post("/api/claims/CLM-1001/start", json={"run_id": run_id})
-    waiting = client.get("/api/claims", params={"status": "waiting"}).json()
+    waiting = client.get("/api/claims/waiting").json()
     assert len(waiting) == 24
-    started = client.get("/api/claims", params={"status": "in_progress"}).json()
-    assert [c["claim_id"] for c in started] == ["CLM-1001"]
-    assert client.get("/api/claims", params={"status": "lost"}).status_code == 422
+    assert "CLM-1001" not in {c["claim_id"] for c in waiting}
 
 
 def test_get_claim(client):

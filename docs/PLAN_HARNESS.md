@@ -1,5 +1,7 @@
 # Plan: the agent's harness
 
+> Built as planned, then reworked after a human review (`docs/humanreview_harness.md`). The agent is now `agent/backend.py`, `agent/tools.py` and `agent/harness.py`, not the `claim.py`, `queue.py`, `runs.py` and `model.py` named below, and both instructions are goal-based rather than step lists.
+
 Builds what `docs/HARNESS.md` asks for: one run that works the whole queue, a to-do list the team can watch, a fresh subagent for each claim, the claims manual looked up section by section, automatic recovery from failures, DeepSeek V4.1 Flash as the default model, and readable instructions for both agents. Six phases, each building on the last.
 
 ## Approach

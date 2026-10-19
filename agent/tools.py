@@ -105,7 +105,7 @@ def pay_claim(amount: float, runtime: ToolRuntime[ClaimContext]) -> str:
 @tool
 def list_waiting_claims() -> str:
     """List the claims waiting in the queue, with their failures so far."""
-    return text("GET", "/api/claims?status=waiting")
+    return text("GET", "/api/claims/waiting")
 
 
 @tool

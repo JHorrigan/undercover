@@ -81,6 +81,7 @@ class StepLog(AgentMiddleware[AgentState[Any], ClaimContext, Any]):
     ) -> ToolMessage | Command[Any]:
         """Log the tool the agent calls, and what it got back."""
         call = request.tool_call
+        # LangChain types a tool call's runtime without the agent's context schema.
         claim_id = cast(ClaimContext, request.runtime.context).claim_id
         add_step(claim_id, "tool", f"{call['name']} {call['args']}")
         result = handler(request)

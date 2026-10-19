@@ -104,3 +104,43 @@ The dashboard passes. It has one API layer (`api.ts`) that every component goes 
 ## What was done
 
 See the end of this file.
+
+## What was done
+
+Every recommendation above was carried out, in two commits, and checked with `npm run check` and live runs.
+
+**The agent** is three modules instead of five:
+
+| Module | Job |
+|---|---|
+| `agent/backend.py` | The one way to reach the API: `request`, plus `text` for tools (errors as text the model can read) and `data` for the harness (JSON, raising on errors). The address comes from `UNDERCOVER_API`. |
+| `agent/tools.py` | Every tool for both agents, the `ClaimContext` and `RunContext` they read through `ToolRuntime`, and `work`, the handoff to the claim agent with its one broad `except`. |
+| `agent/harness.py` | The model, the middleware (`ModelRetryMiddleware`, `ModelCallLimitMiddleware`, a `StepLog` class for the claim agent's steps, and an `after_model` reminder that jumps back to the model), both agents, `run_queue` and `run_one`. |
+
+- **Simpler entry points.** `run_queue` is now ten lines with no loop. `run_one` tries a claim once; a failure puts it back in the queue like any other.
+- **The claim comes from the context.** The claim agent's `get_claim`, `record_decision` and `pay_claim` take the claim from the context, so a claim agent can only act on its own claim (`test_claim_tools_act_only_on_the_agents_claim`).
+- **No string parsing.** Steps come from `wrap_tool_call` and `after_model`, not from re-parsing streamed messages, so `read_section` returns the section as it is.
+- **Removed:** `agent/claim.py`, `queue.py`, `runs.py` and `model.py`.
+
+**The instructions** now give each agent its goal, what good looks like, the rules and where to find things, in about half the words.
+- **The to-do list in the first live run.** The queue agent ticked the list off only at the end, so the instructions now say why the list matters: the handlers watch it live.
+- **The referral in the second run.** The queue agent marked a referred claim "for a handler", so the instructions now say a decision of any kind is "done".
+
+**The backend:**
+- `Db` is defined once in `db.py`.
+- `runs.py` is merged into `run_routes.py`, and `run_agent` uses `reads.found` for its 404.
+- There are two new operations: `list_waiting_claims` (`GET /api/claims/waiting`, its own operation because `docs/TECH_STACK.md` allows no optional inputs) and `get_run` (`GET /api/runs/{run_id}`).
+- The e2e backend now gets `UNDERCOVER_API` too, so an agent started there would use its own backend.
+
+**The dashboard:** `REFRESH_MS` is shared from `hooks.ts`, and the cap input has no hard-coded maximum.
+
+**Checks:** `npm run check` is green: ruff, pyright, 59 pytest tests at 98% coverage, ESLint, Prettier, tsc, 16 vitest tests and 7 Playwright tests. Three live runs on DeepSeek V4.1 Flash, each reseeded and capped at five, decided the same five claims the same way as before the rework. The third run's summary gave the amount paid correctly: $420.00 paid, $3,390.00 waiting for sign-off.
+
+**So it doesn't happen again:**
+- `docs/CODE_STANDARDS.md` now has rules on the points above: addresses from the environment, one client per service, the layers kept apart, the framework first, state through the context, typing and instructions.
+- `docs/PROCESS.md` now has a review of each phase's diff against the standards before it is committed, and a review of the whole build at the end. It also requires that the plan sets out the module layout and checks it against the standards, that earlier shortcuts are fixed rather than built on, and that instruction changes are checked with a live run.
+
+**Still open:**
+- Claim agents read 7 to 14 sections a claim; goal-based instructions did not reduce this.
+- The run summary is still written by the model and can miscount.
+- The backend still runs the agent in-process, until Week 3 moves it out.
