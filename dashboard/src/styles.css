@@ -169,6 +169,11 @@ main {
 }
 
 .status-awaiting_signoff {
+  background: var(--action);
+  color: var(--on-action);
+}
+
+.status-needs_handler {
   background: var(--coral);
 }
 
@@ -258,6 +263,7 @@ main {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+    animation: none !important;
   }
 }
 
@@ -477,6 +483,138 @@ button.primary:disabled {
   line-clamp: 2;
   overflow: hidden;
   color: var(--ink-muted);
+}
+
+/* The agent's run */
+
+.run {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.run-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.run-head p {
+  margin: 0.25rem 0 0;
+}
+
+.start-run {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.start-run input {
+  font: 600 1rem var(--font-mono);
+  width: 4.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--sunken);
+  color: var(--ink);
+}
+
+.start-run .error {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.todo-strip {
+  display: flex;
+  gap: 4px;
+  height: 10px;
+}
+
+.todo-strip span {
+  flex: 1;
+  border-radius: var(--radius-pill);
+  transition: background-color 400ms ease;
+}
+
+.todos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.5rem 1.5rem;
+}
+
+.todo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.todo .badge {
+  min-width: 7.5rem;
+  text-align: center;
+}
+
+.todo-item-done .todo-text {
+  color: var(--ink-muted);
+}
+
+.todo-to_do {
+  background: var(--lavender);
+}
+
+.todo-in_progress {
+  background: var(--cyan);
+}
+
+.todo-strip .todo-in_progress {
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.todo-done {
+  background: var(--mint);
+}
+
+.todo-for_handler {
+  background: var(--coral);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.summary {
+  margin: 0;
+  font-family: var(--font-quote);
+  font-size: 1.375rem;
+  line-height: 1.35;
+  max-width: 72ch;
+}
+
+.sections-read {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.step-read .step-text {
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.step-error .step-text {
+  font-family: var(--font-body);
+  background: var(--coral);
+  color: #0b1020;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
 }
 
 .back {

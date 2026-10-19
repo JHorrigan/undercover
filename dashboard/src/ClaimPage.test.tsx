@@ -34,6 +34,7 @@ const claim = (changes: Partial<Claim>): Claim => ({
   decision: null,
   payment: null,
   sign_off: null,
+  failures: 0,
   ...changes,
 });
 
@@ -130,6 +131,34 @@ it("shows the agent's steps while it works", async () => {
   expect(screen.getByText("Said")).toBeDefined();
 });
 
+it("lists the sections the agent read and what went wrong", async () => {
+  serve(claim({ status: "waiting", failures: 1 }), [
+    { id: 1, at: "", kind: "read", text: "Claims manual: 9. Repeat claims" },
+    {
+      id: 2,
+      at: "",
+      kind: "error",
+      text: "RuntimeError: Provider returned 502",
+    },
+  ]);
+  openClaim();
+  const panel = await screen.findByRole("heading", {
+    name: "What the agent read",
+  });
+  expect(panel.nextElementSibling?.textContent).toBe(
+    "Claims manual: 9. Repeat claims",
+  );
+  expect(screen.getByText("Read")).toBeDefined();
+  expect(screen.getByText("Went wrong")).toBeDefined();
+});
+
+it("has no reading panel before the agent reads anything", async () => {
+  serve(claim({}));
+  openClaim();
+  await screen.findByText("I slipped on wet cobblestones.");
+  expect(screen.queryByText("What the agent read")).toBeNull();
+});
+
 it("holds a payout over the limit until a handler signs off", async () => {
   const fetchMock = serve(
     claim({ status: "awaiting_signoff", decision: approved }),
@@ -176,14 +205,23 @@ it("shows the payment after sign-off", async () => {
   ).toBeDefined();
 });
 
-it("shows the instructions read only", async () => {
+it("shows both agents' instructions read only", async () => {
   vi.stubGlobal(
     "fetch",
-    vi.fn().mockResolvedValue(new Response("# UnderCover Agent")),
+    vi.fn((path: string) =>
+      Promise.resolve(new Response(`# Instructions from ${path}`)),
+    ),
   );
   window.location.hash = "#/instructions";
   render(<App />);
-  expect(await screen.findByText("# UnderCover Agent")).toBeDefined();
+  expect(screen.getByRole("heading", { name: "Queue agent" })).toBeDefined();
+  expect(screen.getByRole("heading", { name: "Claim agent" })).toBeDefined();
+  expect(
+    await screen.findByText("# Instructions from /api/instructions/queue"),
+  ).toBeDefined();
+  expect(
+    await screen.findByText("# Instructions from /api/instructions/claim"),
+  ).toBeDefined();
   expect(screen.queryByRole("textbox")).toBeNull();
   expect(screen.queryByRole("button")).toBeNull();
 });

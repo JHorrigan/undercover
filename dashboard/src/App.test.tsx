@@ -21,12 +21,19 @@ const summary = (id: string, status: ClaimSummary["status"]): ClaimSummary => ({
   amount_claimed: 420,
   submitted_on: "2026-06-24",
   status,
+  failures: 0,
 });
 
 function stubFetch(body: unknown, status = 200) {
   vi.stubGlobal(
     "fetch",
-    vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status })),
+    vi.fn((path: string) =>
+      Promise.resolve(
+        path === "/api/runs/latest"
+          ? new Response("null")
+          : new Response(JSON.stringify(body), { status }),
+      ),
+    ),
   );
 }
 
@@ -35,12 +42,14 @@ it("shows the queue with each claim's status", async () => {
     summary("CLM-1001", "waiting"),
     summary("CLM-1002", "awaiting_signoff"),
     summary("CLM-1003", "decided"),
+    summary("CLM-1004", "needs_handler"),
   ]);
   render(<App />);
   const table = await screen.findByRole("table");
   expect(within(table).getByText("CLM-1001")).toBeDefined();
   expect(within(table).getByText("Waiting for sign-off")).toBeDefined();
-  expect(within(table).getAllByText("$420.00")).toHaveLength(3);
+  expect(within(table).getByText("Needs a handler")).toBeDefined();
+  expect(within(table).getAllByText("$420.00")).toHaveLength(4);
   const legend = screen.getByRole("list", { name: "Claims by status" });
   expect(within(legend).getByText("Decided").previousSibling?.textContent).toBe(
     "1",

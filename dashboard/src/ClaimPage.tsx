@@ -4,6 +4,7 @@ import { AgentPanel } from "./AgentPanel";
 import { Evidence } from "./Evidence";
 import { humanize } from "./format";
 import { useData } from "./hooks";
+import { SectionsRead } from "./SectionsRead";
 import { StatusBadge } from "./Status";
 import { Steps } from "./Steps";
 
@@ -47,6 +48,7 @@ export function ClaimPage({ id }: Readonly<{ id: string }>) {
         <Evidence claim={claim.data} />
         <div className="stack agent-side">
           <AgentPanel claim={claim.data} onChange={onChange} />
+          <SectionsRead steps={steps.data ?? []} />
           <Steps steps={steps.data ?? []} />
         </div>
       </div>

@@ -4,6 +4,8 @@ const KIND_LABEL: Record<Step["kind"], string> = {
   tool: "Called",
   result: "Got back",
   reply: "Said",
+  read: "Read",
+  error: "Went wrong",
 };
 
 /** The agent's steps on a claim, in order. */

@@ -1,4 +1,5 @@
-export type Status = "waiting" | "in_progress" | "awaiting_signoff" | "decided";
+export type Status =
+  "waiting" | "in_progress" | "awaiting_signoff" | "decided" | "needs_handler";
 
 export interface ClaimSummary {
   claim_id: string;
@@ -9,6 +10,7 @@ export interface ClaimSummary {
   amount_claimed: number;
   submitted_on: string;
   status: Status;
+  failures: number;
 }
 
 export interface Item {
@@ -52,6 +54,7 @@ export interface Claim {
     handler_name: string;
     signed_at: string;
   } | null;
+  failures: number;
 }
 
 export interface Policy {
@@ -92,9 +95,27 @@ export interface Handler {
 export interface Step {
   id: number;
   at: string;
-  kind: "tool" | "result" | "reply";
+  kind: "tool" | "result" | "reply" | "read" | "error";
   text: string;
 }
+
+export type TodoStatus = "to_do" | "in_progress" | "done" | "for_handler";
+
+export interface Todo {
+  text: string;
+  status: TodoStatus;
+}
+
+export interface Run {
+  run_id: string;
+  cap: number;
+  started_at: string;
+  finished_at: string | null;
+  summary: string | null;
+  todos: Todo[];
+}
+
+export type AgentName = "queue" | "claim";
 
 export function errorMessage(reason: unknown): string {
   return reason instanceof Error ? reason.message : String(reason);
@@ -136,7 +157,10 @@ export const api = {
   customer: (id: string) => getJson<Customer>(`/api/customers/${id}`),
   handlers: () => getJson<Handler[]>("/api/handlers"),
   steps: (id: string) => getJson<Step[]>(`/api/claims/${id}/steps`),
-  instructions: () => getText("/api/instructions/claim"),
+  instructions: (agent: AgentName) => getText(`/api/instructions/${agent}`),
+  latestRun: () => getJson<Run | null>("/api/runs/latest"),
+  startRun: (cap: number) =>
+    postJson<{ status: string }>("/api/runs/start", { cap }),
   runAgent: (id: string) =>
     postJson<{ status: string }>(`/api/claims/${id}/run`, {}),
   signOff: (id: string, handlerId: string) =>

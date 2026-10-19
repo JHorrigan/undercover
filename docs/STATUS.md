@@ -2,7 +2,7 @@
 
 The claims pilot from `docs/PLAN.md` is built: all six phases are done and `npm run check` passes.
 
-The harness from `docs/PLAN_HARNESS.md` is in progress: phases 1 to 4 are done (the queue agent: `uv run -m agent --cap 5`; the claim agent as a subagent with retries and failure handling; documents by section, the claims manual, DeepSeek V4.1 Flash by default; runs, the cap, to-do lists, failed claims and recovery in the backend). Delete `backend/undercover.db` to pick up the new tables.
+The harness from `docs/PLAN_HARNESS.md` is in progress: phases 1 to 5 are done (the dashboard's run panel, to-do list and sections read; the queue agent: `uv run -m agent --cap 5`; the claim agent as a subagent with retries and failure handling; documents by section, the claims manual, DeepSeek V4.1 Flash by default; runs, the cap, to-do lists, failed claims and recovery in the backend). Delete `backend/undercover.db` to pick up the new tables.
 
 ## What's built
 

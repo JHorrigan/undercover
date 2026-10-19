@@ -1,6 +1,7 @@
 import { api } from "./api";
 import { humanize, money } from "./format";
 import { useData } from "./hooks";
+import { RunPanel } from "./RunPanel";
 import { StatusBadge, StatusBar } from "./Status";
 
 const REFRESH_MS = 3000;
@@ -13,6 +14,7 @@ export function Queue() {
         <h1>Claims queue</h1>
         {claims && <span className="muted">{claims.length} claims</span>}
       </div>
+      <RunPanel />
       {error && <p className="error">Couldn't load the queue: {error}</p>}
       {claims && (
         <>

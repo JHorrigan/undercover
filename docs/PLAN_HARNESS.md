@@ -150,13 +150,14 @@ The team can start a run, watch the to-do list, see what the agent read, and rea
 - Queue page: a "Run the queue" panel with a number input for the cap (default 5) and a start button, disabled while a run is going; the current run's to-do list with a badge per status (to do, in progress, done, for a handler) and the summary when it finishes; polled every three seconds with the queue.
 - `needs_handler` badge, "Needs a handler", in Coral Red, and in the status bar.
 - Claim page: "What the agent read", listing the `read` steps; the steps list labels them "Read".
-- Instructions page: "Running the queue" and "Working a claim", one after the other, read only.
+- Instructions page: "Queue agent" and "Claim agent", one after the other, read only.
+- "Waiting for sign-off" moves to Electric Blue, so Coral Red marks only the claims that need a handler.
 - Brand from `docs/BRAND.md`, light and dark.
 
 **Success criteria**
-- [ ] `npm run check` passes, including vitest tests for the run panel (no run, a run in progress, a finished run with its summary), the new badge, and the sections-read panel.
-- [ ] Playwright e2e (on its own backend, no model): the queue page shows the run panel; a to-do list written through `PUT /api/runs/{id}/todos` appears with its statuses; a claim with `read` steps shows them under "What the agent read"; the instructions page shows both headings.
-- [ ] Checked in the browser with the Playwright MCP server, light and dark: the run panel, a to-do list, the new badge and the claim page's read sections.
+- [x] `npm run check` passes, including vitest tests for the run panel (no run, a run in progress, a finished run with its summary), the new badge, and the sections-read panel.
+- [x] Playwright e2e (on its own backend, no model): the queue page shows the run panel; a to-do list written through `PUT /api/runs/{id}/todos` appears with its statuses; a claim with `read` steps shows them under "What the agent read"; the instructions page shows both agents' instructions.
+- [x] Checked in the browser with the Playwright MCP server, light and dark: the run panel, a to-do list, the new badge and the claim page's read sections.
 
 ## Phase 6: A live run, and the docs
 
