@@ -167,10 +167,10 @@ Proves it on the real model and brings the docs up to date.
 - Update `docs/SPEC.md` (the manual moves out of "Not for now"; decisions follow the wording and the manual; queue runs, the to-do list and `needs_handler`), `docs/TECH_STACK.md` (two entry points, the default model, the middleware) and `docs/STATUS.md` (what's built, how to run it, the live run's results; the "stuck in progress" known limit removed).
 
 **Success criteria**
-- [ ] After reseeding, a run capped at five on `deepseek/deepseek-v4.1-flash` works five claims on its own and finishes with a summary; the other 20 claims stay `waiting`.
-- [ ] In the browser with the Playwright MCP server: the to-do list fills in and is ticked off during the run; each worked claim shows its steps and the sections the agent read.
-- [ ] `docs/SPEC.md`, `docs/TECH_STACK.md` and `docs/STATUS.md` describe the product as it now is; `docs/PLAN.md` is unchanged.
-- [ ] `npm run check` is green.
+- [x] After reseeding, a run capped at five on `deepseek/deepseek-v4.1-flash` works five claims on its own and finishes with a summary; the other 20 claims stay `waiting`.
+- [x] In the browser with the Playwright MCP server: the to-do list fills in and is ticked off during the run; each worked claim shows its steps and the sections the agent read.
+- [x] `docs/SPEC.md`, `docs/TECH_STACK.md` and `docs/STATUS.md` describe the product as it now is; `docs/PLAN.md` is unchanged.
+- [x] `npm run check` is green.
 
 ## Not in this build
 

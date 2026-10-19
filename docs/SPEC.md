@@ -17,17 +17,26 @@ We want an AI agent, the UnderCover Agent, to work the queue the way a handler d
 
 Our goal is to handle claims straight through, as accurately as our handlers do.
 
+## Working the queue
+
+- **One run works the whole queue.** We start the agent once and it works every waiting claim, choosing the order itself, then finishes with a short summary for the handlers. A run can be capped at a number of claims, with the rest left waiting, and the agent can still be run on one named claim.
+- **A to-do list we can watch.** The agent plans each run as a to-do list and keeps it up to date: each item is to do, in progress, done or left for a handler.
+- **A fresh helper for each claim.** Each claim is worked from a clean start by its own helper, which reports back in a line: the decision and payout, or what went wrong. Every step on a claim is recorded on that claim.
+- **The documents, looked up the way a handler would.** For each claim the agent finds and reads the sections of the policy wording and the claims manual it needs, and the claim page shows what it read.
+- **Problems are put right automatically.** One bad claim never stops a run or leaves a claim stuck in progress. A claim that fails before it is decided goes back in the queue to be tried again, and a claim that fails twice is left for a handler. No claim is ever decided or paid twice. Before it finishes, the agent checks that it has not missed a waiting claim within its cap.
+
 ## What the team needs to see
 
-- The queue, with where each claim stands: waiting, in progress, waiting for sign-off or decided.
-- Each claim in full, with the agent's decision and its reasons.
+- The queue, with where each claim stands: waiting, in progress, waiting for sign-off, decided, or needs a handler.
+- The agent's to-do list for the current run, and its summary when it finishes.
+- Each claim in full, with the agent's decision and its reasons, and the sections of the wording and the manual it read.
 - What the agent is doing on a claim while it works, step by step.
-- The agent's instructions, read only.
+- The agent's instructions for running the queue and for working a claim, read only.
 
 ## Rules
 
 - A payout over $1,000 needs a handler's sign-off. The agent can approve such a claim, but the payment waits until a handler signs off. The system must block the payment until then, even if the agent tries to pay.
-- Decisions follow the policy wording.
+- Decisions follow the policy wording, and the claims manual where the wording leaves a question open.
 - Our handlers' own decisions on these claims are in `data/evals/`. We use them to check the agent's work. The agent must never see them.
 - Amounts are in US dollars.
 
@@ -37,7 +46,6 @@ Everything is in `data/`, described in `data/README.md`: the claims queue, the p
 
 ## Not for now
 
-- The claims manual. For the pilot, the agent works from the policy wording alone.
 - No sign-in. Everyone who uses the screens sees everything.
 - No real payments.
 - No messages to customers.
