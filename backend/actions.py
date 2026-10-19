@@ -1,17 +1,16 @@
 """Write operations: starting, deciding, paying and signing off claims."""
 
 import sqlite3
-from typing import Annotated, Any, Literal
+from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from backend import run_store, store
-from backend.db import get_db
+from backend.db import Db
 from backend.run_routes import open_run_or_error
 
 router = APIRouter(prefix="/api/claims/{claim_id}")
-Db = Annotated[sqlite3.Connection, Depends(get_db)]
 
 
 class Decision(BaseModel):

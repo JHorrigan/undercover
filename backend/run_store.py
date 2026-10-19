@@ -33,10 +33,14 @@ def running(conn: sqlite3.Connection) -> bool:
 
 def latest_run(conn: sqlite3.Connection) -> dict[str, Any] | None:
     """Return the latest run with its to-do list, or None before any run."""
-    row = conn.execute("SELECT * FROM runs ORDER BY rowid DESC").fetchone()
-    if row is None:
-        return None
-    return dict(row) | {"todos": todos(conn, row["run_id"])}
+    row = conn.execute("SELECT run_id FROM runs ORDER BY rowid DESC").fetchone()
+    return run(conn, row["run_id"]) if row else None
+
+
+def run(conn: sqlite3.Connection, run_id: str) -> dict[str, Any] | None:
+    """Return one run with its to-do list, or None."""
+    row = run_row(conn, run_id)
+    return row | {"todos": todos(conn, run_id)} if row else None
 
 
 def todos(conn: sqlite3.Connection, run_id: str) -> list[dict[str, str]]:

@@ -1,16 +1,18 @@
-"""Run operations: creating a run, its to-do list and finishing it."""
+"""Runs: starting the agents, a run's to-do list, and finishing it."""
 
 import sqlite3
-from typing import Annotated, Any, Literal
+from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, Field
 
-from backend import run_store
-from backend.db import get_db
+from agent import claim as agent
+from agent import queue
+from backend import run_store, store
+from backend.db import Db
+from backend.reads import found
 
-router = APIRouter(prefix="/api/runs")
-Db = Annotated[sqlite3.Connection, Depends(get_db)]
+router = APIRouter(prefix="/api")
 
 
 class NewRun(BaseModel):
@@ -48,7 +50,7 @@ def open_run_or_error(db: sqlite3.Connection, run_id: str) -> dict[str, Any]:
     return run
 
 
-@router.post("", operation_id="create_run")
+@router.post("/runs", operation_id="create_run")
 def create_run(new_run: NewRun, db: Db) -> dict[str, str]:
     """Create a run capped at a number of claims; only one runs at a time."""
     if run_store.running(db):
@@ -58,13 +60,19 @@ def create_run(new_run: NewRun, db: Db) -> dict[str, str]:
     return {"run_id": run_id}
 
 
-@router.get("/latest", operation_id="get_latest_run")
+@router.get("/runs/latest", operation_id="get_latest_run")
 def get_latest_run(db: Db) -> dict[str, Any] | None:
     """Get the latest run with its to-do list and summary, or null."""
     return run_store.latest_run(db)
 
 
-@router.put("/{run_id}/todos", operation_id="update_todos")
+@router.get("/runs/{run_id}", operation_id="get_run")
+def get_run(run_id: str, db: Db) -> dict[str, Any]:
+    """Get one run with its to-do list and summary."""
+    return found(run_store.run(db, run_id), "Run")
+
+
+@router.put("/runs/{run_id}/todos", operation_id="update_todos")
 def update_todos(run_id: str, todos: Todos, db: Db) -> dict[str, str]:
     """Replace a run's to-do list."""
     open_run_or_error(db, run_id)
@@ -73,7 +81,7 @@ def update_todos(run_id: str, todos: Todos, db: Db) -> dict[str, str]:
     return {"status": "ok"}
 
 
-@router.post("/{run_id}/finish", operation_id="finish_run")
+@router.post("/runs/{run_id}/finish", operation_id="finish_run")
 def finish_run(run_id: str, finish: Finish, db: Db) -> dict[str, str]:
     """Finish a run with a summary, unless a waiting claim is within its cap."""
     run = open_run_or_error(db, run_id)
@@ -84,10 +92,30 @@ def finish_run(run_id: str, finish: Finish, db: Db) -> dict[str, str]:
     return {"status": "finished"}
 
 
-@router.post("/{run_id}/stop", operation_id="stop_run")
+@router.post("/runs/{run_id}/stop", operation_id="stop_run")
 def stop_run(run_id: str, finish: Finish, db: Db) -> dict[str, str]:
     """Close a run that could not finish, with the reason it stopped."""
     open_run_or_error(db, run_id)
     run_store.finish(db, run_id, finish.summary)
     db.commit()
     return {"status": "stopped"}
+
+
+@router.post("/runs/start", operation_id="start_run")
+def start_run(new_run: NewRun, tasks: BackgroundTasks, db: Db) -> dict[str, str]:
+    """Start the queue agent on the waiting claims up to a cap, in the background."""
+    if run_store.running(db):
+        raise HTTPException(409, "A run is already going")
+    tasks.add_task(queue.run_queue, new_run.cap)
+    return {"status": "started"}
+
+
+@router.post("/claims/{claim_id}/run", operation_id="run_agent")
+def run_agent(claim_id: str, tasks: BackgroundTasks, db: Db) -> dict[str, str]:
+    """Start the UnderCover Agent on one waiting claim, in the background."""
+    if found(store.claim_detail(db, claim_id), "Claim")["status"] != "waiting":
+        raise HTTPException(409, "Only a waiting claim can be run")
+    if run_store.running(db):
+        raise HTTPException(409, "A run is already going")
+    tasks.add_task(agent.run_one, claim_id)
+    return {"status": "started"}

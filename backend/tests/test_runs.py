@@ -41,6 +41,8 @@ def test_one_run_at_a_time(client):
     assert client.post("/api/runs", json={"cap": 1}).status_code == 409
     assert client.post("/api/runs", json={"cap": 0}).status_code == 422
     assert client.get("/api/runs/latest").json()["run_id"] == run_id
+    assert client.get(f"/api/runs/{run_id}").json()["cap"] == 2
+    assert client.get("/api/runs/RUN-missing").status_code == 404
 
 
 def test_cap_limits_new_claims(client):

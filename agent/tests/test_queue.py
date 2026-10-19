@@ -3,7 +3,7 @@ from langchain_core.messages import AIMessage
 
 from agent import queue, runs
 from agent.tests.conftest import broken_claim, call_tool, decide, stub
-from backend import runs as run_routes
+from backend import run_routes
 
 
 @pytest.fixture(autouse=True)

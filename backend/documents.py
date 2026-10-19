@@ -2,16 +2,15 @@
 
 import re
 import sqlite3
-from typing import Annotated, Literal
+from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import PlainTextResponse
 
 from backend import store
-from backend.db import get_db
+from backend.db import Db
 
 router = APIRouter(prefix="/api/documents")
-Db = Annotated[sqlite3.Connection, Depends(get_db)]
 Document = Literal["policy_wording", "claims_manual"]
 
 HEADING = re.compile(r"^## (\d+)\. (.+)$", re.MULTILINE)

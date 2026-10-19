@@ -1,19 +1,20 @@
 """Read operations: the queue, the records and the instructions."""
 
-import sqlite3
 from pathlib import Path
-from typing import Annotated, Any, Literal
+from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import PlainTextResponse
 
 from backend import store
-from backend.db import get_db
+from backend.db import Db
 
 INSTRUCTIONS = Path(__file__).parent / "instructions"
 
 router = APIRouter(prefix="/api")
-Db = Annotated[sqlite3.Connection, Depends(get_db)]
+Status = Literal[
+    "waiting", "in_progress", "awaiting_signoff", "decided", "needs_handler"
+]
 
 
 def found(value: Any, what: str) -> Any:
@@ -24,9 +25,10 @@ def found(value: Any, what: str) -> Any:
 
 
 @router.get("/claims", operation_id="list_claims")
-def list_claims(db: Db) -> list[dict[str, Any]]:
-    """List every claim in the queue with its status."""
-    return store.claim_summaries(db)
+def list_claims(db: Db, status: Status | None = None) -> list[dict[str, Any]]:
+    """List the claims in the queue with their status, or only those with one status."""
+    claims = store.claim_summaries(db)
+    return [c for c in claims if status in (None, c["status"])]
 
 
 @router.get("/claims/{claim_id}", operation_id="get_claim")

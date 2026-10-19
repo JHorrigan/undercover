@@ -4,6 +4,9 @@ import os
 import sqlite3
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Annotated
+
+from fastapi import Depends
 
 DEFAULT_DB = Path(__file__).parent / "undercover.db"
 
@@ -90,3 +93,6 @@ def get_db() -> Iterator[sqlite3.Connection]:
 def create_schema(conn: sqlite3.Connection) -> None:
     """Create the tables if they don't exist."""
     conn.executescript(SCHEMA)
+
+
+Db = Annotated[sqlite3.Connection, Depends(get_db)]
