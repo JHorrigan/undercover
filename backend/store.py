@@ -63,6 +63,7 @@ def claim_summaries(conn: sqlite3.Connection) -> list[dict[str, Any]]:
         {field: claim[field] for field in SUMMARY_FIELDS}
         | {"customer_name": names[claim["customer_id"]]}
         | {"status": status[claim["claim_id"]]}
+        | {"failures": failures(conn, claim["claim_id"])}
         for claim in records(conn, "claim")
     ]
 

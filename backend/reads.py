@@ -64,6 +64,6 @@ def list_handlers(db: Db) -> list[dict[str, Any]]:
     operation_id="get_instructions",
     response_class=PlainTextResponse,
 )
-def get_instructions(agent: Literal["claim"]) -> str:
+def get_instructions(agent: Literal["queue", "claim"]) -> str:
     """Get the instructions for one of the UnderCover agents, as Markdown."""
     return (INSTRUCTIONS / f"{agent}.md").read_text(encoding="utf-8")

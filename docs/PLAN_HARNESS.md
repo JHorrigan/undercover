@@ -45,6 +45,7 @@ A claim that already has a decision is never put back in the queue: `fail_claim`
 | `GET /api/runs/latest` | `get_latest_run` | dashboard | New: the latest run with its to-do list and summary, or `null` |
 | `PUT /api/runs/{run_id}/todos` | `update_todos` | queue agent | New: replaces the run's to-do list |
 | `POST /api/runs/{run_id}/finish` | `finish_run` | queue agent | New: body `{summary}`; 409 naming the missed claims if any waiting claim is within the cap |
+| `POST /api/runs/{run_id}/stop` | `stop_run` | agent runner | New: body `{summary}`; closes a run that could not finish |
 | `POST /api/claims/{claim_id}/start` | `start_claim` | agent runner | Now takes `{run_id}`; 409 when the run's cap is used up |
 | `POST /api/claims/{claim_id}/fail` | `fail_claim` | agent runner | New: body `{error}`; back to `waiting`, or `needs_handler` on the second failure |
 | `POST /api/claims/{claim_id}/run` | `run_agent` | dashboard | Now a run with a cap of 1 on this claim |
@@ -127,19 +128,20 @@ One run works the queue, capped, with its to-do list, summary and missed-claims 
   - `update_todos(todos)`: replaces the to-do list;
   - `work_claim(claim_id)`: the subagent from phase 3; returns its one line;
   - `finish_run(summary)`: ends the run, or returns the 409 naming missed claims.
-- If the agent stops without finishing, the runner gives it the `finish_run` refusal and lets it carry on, at most twice, then closes the run with "Stopped before finishing" and the reason.
+- If the agent stops without finishing, the runner reminds it to check for missed claims and finish, at most twice, then closes the run with `stop_run` ("Stopped before finishing"). A crash closes the run the same way, so it never blocks the next run.
 - `backend/instructions/queue.md`: list the waiting claims, choose an order and write the to-do list, work each claim with `work_claim` and tick it off, put failed claims back to do or mark them for a handler, check for missed claims, finish with a short summary for the handlers.
 - `start_run` runs `run_queue` in the background. `uv run -m agent --cap 5` runs it from the command line.
 
 **Success criteria**
-- [ ] `uv run pytest agent` passes on stub models (one for the queue agent, one for the claim agent).
-- [ ] Cap: a run capped at 2 on a scripted stub decides two claims; the other 23 stay `waiting`; a `work_claim` on a third claim returns the cap refusal.
-- [ ] A claim whose claim agent raises does not stop the run: the next claim is still decided and the run finishes.
-- [ ] The failed claim goes back to `waiting`, is worked again in the same run and decided.
-- [ ] A claim that fails twice is `needs_handler` and its to-do item is `for_handler`.
-- [ ] Missed claims: a stub that tries to finish early gets the refusal naming the waiting claim, works it, then finishes.
-- [ ] The run's to-do list and summary are stored and returned by `get_latest_run`.
-- [ ] `POST /api/runs/start` with `{cap: 1}` returns started and the run appears in `get_latest_run`.
+- [x] `uv run pytest agent` passes on stub models (one for the queue agent, one for the claim agent).
+- [x] Cap: a run capped at 2 on a scripted stub decides two claims; the other 23 stay `waiting`; a `work_claim` on a third claim returns the cap refusal.
+- [x] A claim whose claim agent raises does not stop the run: the next claim is still decided and the run finishes.
+- [x] The failed claim goes back to `waiting`, is worked again in the same run and decided.
+- [x] A claim that fails twice is `needs_handler` and its to-do item is `for_handler`.
+- [x] Missed claims: a stub that tries to finish early gets the refusal naming the waiting claim, works it, then finishes.
+- [x] The run's to-do list and summary are stored and returned by `get_latest_run`.
+- [x] `POST /api/runs/start` with `{cap: 1}` returns started and starts the queue agent with that cap; it is 409 while a run is going.
+- [x] A queue agent that stops without finishing is reminded and then finishes; one that never finishes is stopped with "Stopped before finishing".
 
 ## Phase 5: The dashboard
 

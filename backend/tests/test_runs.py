@@ -129,3 +129,11 @@ def test_restart_recovers_stuck_claims_and_runs(client):
     assert run["summary"] == "Interrupted"
     conn = sqlite3.connect(db_path())
     assert conn.execute("SELECT count(*) FROM runs").fetchone() == (1,)
+
+
+def test_stop_closes_a_run_with_missed_claims(client):
+    run_id = new_run(client, 1)
+    body = {"summary": "Stopped before finishing"}
+    assert client.post(f"/api/runs/{run_id}/stop", json=body).status_code == 200
+    assert client.get("/api/runs/latest").json()["summary"] == body["summary"]
+    assert client.post(f"/api/runs/{run_id}/stop", json=body).status_code == 409

@@ -1,4 +1,4 @@
-"""Starting the UnderCover Agent on a claim from the dashboard."""
+"""Starting the UnderCover agents from the dashboard, in the background."""
 
 import sqlite3
 from typing import Annotated
@@ -6,8 +6,10 @@ from typing import Annotated
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 
 from agent import claim as agent
+from agent import queue
 from backend import run_store, store
 from backend.db import get_db
+from backend.run_routes import NewRun
 
 router = APIRouter(prefix="/api")
 Db = Annotated[sqlite3.Connection, Depends(get_db)]
@@ -24,4 +26,13 @@ def run_agent(claim_id: str, tasks: BackgroundTasks, db: Db) -> dict[str, str]:
     if run_store.running(db):
         raise HTTPException(409, "A run is already going")
     tasks.add_task(agent.run_one, claim_id)
+    return {"status": "started"}
+
+
+@router.post("/runs/start", operation_id="start_run")
+def start_run(new_run: NewRun, tasks: BackgroundTasks, db: Db) -> dict[str, str]:
+    """Start the queue agent on the waiting claims up to a cap, in the background."""
+    if run_store.running(db):
+        raise HTTPException(409, "A run is already going")
+    tasks.add_task(queue.run_queue, new_run.cap)
     return {"status": "started"}

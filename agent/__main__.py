@@ -1,7 +1,11 @@
-"""Run the UnderCover Agent on one claim: uv run -m agent CLM-1001."""
+"""Run the UnderCover Agent: uv run -m agent CLM-1001, or uv run -m agent --cap 5."""
 
 import sys
 
 from agent.claim import run_one
+from agent.queue import run_queue
 
-print(run_one(sys.argv[1]))
+if sys.argv[1] == "--cap":
+    print(run_queue(int(sys.argv[2])))
+else:
+    print(run_one(sys.argv[1]))

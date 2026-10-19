@@ -10,12 +10,25 @@ from langchain_core.messages import AIMessage
 from agent import tools
 from backend.main import app
 
+MODEL_ERROR = "<model error>"
+
 
 class StubModel(GenericFakeChatModel):
-    """A chat model that gives scripted replies in place of a real model."""
+    """A chat model that gives scripted replies; MODEL_ERROR in the script raises."""
 
     def bind_tools(self, tools, **kwargs):
         return self
+
+    def _generate(self, *args, **kwargs):
+        result = super()._generate(*args, **kwargs)
+        if result.generations[0].message.content == MODEL_ERROR:
+            raise RuntimeError("Provider returned 502")
+        return result
+
+
+def broken_claim():
+    """A claim agent's script whose model fails on every try, retries included."""
+    return [AIMessage(content=MODEL_ERROR)] * 3
 
 
 def call_tool(name, args, id_="1"):

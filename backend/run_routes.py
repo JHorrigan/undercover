@@ -82,3 +82,12 @@ def finish_run(run_id: str, finish: Finish, db: Db) -> dict[str, str]:
     run_store.finish(db, run_id, finish.summary)
     db.commit()
     return {"status": "finished"}
+
+
+@router.post("/{run_id}/stop", operation_id="stop_run")
+def stop_run(run_id: str, finish: Finish, db: Db) -> dict[str, str]:
+    """Close a run that could not finish, with the reason it stopped."""
+    open_run_or_error(db, run_id)
+    run_store.finish(db, run_id, finish.summary)
+    db.commit()
+    return {"status": "stopped"}
