@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS records (
 );
 CREATE TABLE IF NOT EXISTS claims (
     claim_id TEXT PRIMARY KEY,
-    status TEXT NOT NULL
+    status TEXT NOT NULL,
+    failures INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS decisions (
     claim_id TEXT PRIMARY KEY,
@@ -42,6 +43,25 @@ CREATE TABLE IF NOT EXISTS steps (
     at TEXT NOT NULL,
     kind TEXT NOT NULL,
     text TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS runs (
+    run_id TEXT PRIMARY KEY,
+    cap INTEGER NOT NULL,
+    started_at TEXT NOT NULL,
+    finished_at TEXT,
+    summary TEXT
+);
+CREATE TABLE IF NOT EXISTS run_claims (
+    run_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    PRIMARY KEY (run_id, claim_id)
+);
+CREATE TABLE IF NOT EXISTS todos (
+    run_id TEXT NOT NULL,
+    position INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    status TEXT NOT NULL,
+    PRIMARY KEY (run_id, position)
 );
 """
 

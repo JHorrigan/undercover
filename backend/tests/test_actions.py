@@ -20,8 +20,9 @@ def pay(client, amount):
 
 
 def test_start_claim(client):
-    assert client.post(f"{CLAIM}/start").json()["status"] == "in_progress"
-    assert client.post(f"{CLAIM}/start").status_code == 409
+    body = client.post("/api/runs", json={"cap": 1}).json()
+    assert client.post(f"{CLAIM}/start", json=body).json()["status"] == "in_progress"
+    assert client.post(f"{CLAIM}/start", json=body).status_code == 409
 
 
 def test_approve_under_limit_then_pay(client):

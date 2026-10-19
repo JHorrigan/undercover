@@ -40,7 +40,8 @@ A claim that already has a decision is never put back in the queue: `fail_claim`
 | `GET /api/documents/{document}/sections/{section}` | `read_section` | agent | New: one section, `document` is `policy_wording` or `claims_manual` |
 | `GET /api/policy-wording` | `get_policy_wording` | | Removed |
 | `GET /api/instructions/{agent}` | `get_instructions` | agent, dashboard | Now takes `queue` or `claim` |
-| `POST /api/runs` | `start_run` | dashboard | New: body `{cap}`, starts the queue agent in the background; 409 if a run is going |
+| `POST /api/runs` | `create_run` | agent runner | New: body `{cap}`, records a run; 409 if a run is going |
+| `POST /api/runs/start` | `start_run` | dashboard | New: body `{cap}`, starts the queue agent in the background; 409 if a run is going |
 | `GET /api/runs/latest` | `get_latest_run` | dashboard | New: the latest run with its to-do list and summary, or `null` |
 | `PUT /api/runs/{run_id}/todos` | `update_todos` | queue agent | New: replaces the run's to-do list |
 | `POST /api/runs/{run_id}/finish` | `finish_run` | queue agent | New: body `{summary}`; 409 naming the missed claims if any waiting claim is within the cap |
@@ -89,14 +90,14 @@ The backend records runs and enforces the guarantees, before any agent uses them
 - Startup recovery: claims left `in_progress` are failed with "Interrupted", and unfinished runs are closed.
 
 **Success criteria**
-- [ ] `uv run pytest backend` passes, with tests for each point below.
-- [ ] A run with a cap of 2 can start two claims; the third `start_claim` is 409; a claim already in the run can be started again after a failure.
-- [ ] `fail_claim` once returns the claim to `waiting` with `failures` 1; twice makes it `needs_handler`; on a decided claim it changes nothing.
-- [ ] `update_todos` then `get_latest_run` returns the list in order with each status; a status outside the four is 422.
-- [ ] `finish_run` is 409 naming the waiting claims while cap is left, and succeeds when the cap is used up or no claim is waiting.
-- [ ] `get_latest_run` is `null` before any run.
-- [ ] A test seeds a claim `in_progress`, restarts the app, and finds it `waiting` with one failure.
-- [ ] `start_run` is 409 while another run is unfinished.
+- [x] `uv run pytest backend` passes, with tests for each point below.
+- [x] A run with a cap of 2 can start two claims; the third `start_claim` is 409; a claim already in the run can be started again after a failure.
+- [x] `fail_claim` once returns the claim to `waiting` with `failures` 1; twice makes it `needs_handler`; on a decided claim it changes nothing.
+- [x] `update_todos` then `get_latest_run` returns the list in order with each status; a status outside the four is 422.
+- [x] `finish_run` is 409 naming the waiting claims while cap is left, and succeeds when the cap is used up or no claim is waiting.
+- [x] `get_latest_run` is `null` before any run.
+- [x] A test seeds a claim `in_progress`, restarts the app, and finds it `waiting` with one failure.
+- [x] `create_run` is 409 while another run is unfinished.
 
 ## Phase 3: The claim agent as a subagent
 
@@ -138,7 +139,7 @@ One run works the queue, capped, with its to-do list, summary and missed-claims 
 - [ ] A claim that fails twice is `needs_handler` and its to-do item is `for_handler`.
 - [ ] Missed claims: a stub that tries to finish early gets the refusal naming the waiting claim, works it, then finishes.
 - [ ] The run's to-do list and summary are stored and returned by `get_latest_run`.
-- [ ] `POST /api/runs` with `{cap: 1}` returns started and the run appears in `get_latest_run`.
+- [ ] `POST /api/runs/start` with `{cap: 1}` returns started and the run appears in `get_latest_run`.
 
 ## Phase 5: The dashboard
 

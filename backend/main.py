@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from backend import actions, documents, reads, runs
+from backend import actions, documents, reads, run_routes, run_store, runs
 from backend.db import connect, create_schema
 from backend.seed import seed
 
@@ -16,6 +16,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     conn = connect()
     create_schema(conn)
     seed(conn)
+    run_store.recover(conn)
     conn.close()
     yield
 
@@ -25,6 +26,7 @@ app.include_router(reads.router)
 app.include_router(actions.router)
 app.include_router(runs.router)
 app.include_router(documents.router)
+app.include_router(run_routes.router)
 
 
 @app.get("/api/health", operation_id="health")

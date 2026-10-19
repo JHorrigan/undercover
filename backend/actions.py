@@ -1,14 +1,14 @@
 """Write operations: starting, deciding, paying and signing off claims."""
 
 import sqlite3
-from datetime import UTC, datetime
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from backend import store
+from backend import run_store, store
 from backend.db import get_db
+from backend.run_routes import open_run_or_error
 
 router = APIRouter(prefix="/api/claims/{claim_id}")
 Db = Annotated[sqlite3.Connection, Depends(get_db)]
@@ -35,16 +35,23 @@ class SignOff(BaseModel):
     handler_id: str
 
 
+class Start(BaseModel):
+    """The run that starts a claim."""
+
+    run_id: str
+
+
+class Failure(BaseModel):
+    """What went wrong on a claim before its decision."""
+
+    error: str = Field(min_length=1)
+
+
 class Step(BaseModel):
     """One step the agent took on a claim."""
 
     kind: str
     text: str
-
-
-def now() -> str:
-    """Return the current time in UTC, to the second."""
-    return datetime.now(UTC).isoformat(timespec="seconds")
 
 
 def claim_or_404(db: sqlite3.Connection, claim_id: str) -> dict[str, Any]:
@@ -55,25 +62,34 @@ def claim_or_404(db: sqlite3.Connection, claim_id: str) -> dict[str, Any]:
     return claim
 
 
-def set_status(db: sqlite3.Connection, claim_id: str, status: str) -> None:
-    """Move a claim to a new status."""
-    db.execute("UPDATE claims SET status = ? WHERE claim_id = ?", (status, claim_id))
-
-
 def record_payment(db: sqlite3.Connection, claim_id: str, amount: float) -> None:
     """Store a payment."""
     db.execute(
         "INSERT INTO payments (claim_id, amount, paid_at) VALUES (?, ?, ?)",
-        (claim_id, amount, now()),
+        (claim_id, amount, store.now()),
     )
 
 
 @router.post("/start", operation_id="start_claim")
-def start_claim(claim_id: str, db: Db) -> dict[str, Any]:
-    """Mark a waiting claim as in progress."""
+def start_claim(claim_id: str, start: Start, db: Db) -> dict[str, Any]:
+    """Mark a waiting claim as in progress for a run, within the run's cap."""
     if claim_or_404(db, claim_id)["status"] != "waiting":
         raise HTTPException(409, "Only a waiting claim can be started")
-    set_status(db, claim_id, "in_progress")
+    run = open_run_or_error(db, start.run_id)
+    taken = run_store.claims_taken(db, start.run_id)
+    if claim_id not in taken and len(taken) >= run["cap"]:
+        raise HTTPException(409, f"This run has used its cap of {run['cap']} claims")
+    run_store.take_claim(db, start.run_id, claim_id)
+    store.set_status(db, claim_id, "in_progress")
+    db.commit()
+    return claim_or_404(db, claim_id)
+
+
+@router.post("/fail", operation_id="fail_claim")
+def fail_claim(claim_id: str, failure: Failure, db: Db) -> dict[str, Any]:
+    """Requeue a claim that failed before its decision, or leave it for a handler."""
+    claim_or_404(db, claim_id)
+    run_store.fail_claim(db, claim_id, failure.error)
     db.commit()
     return claim_or_404(db, claim_id)
 
@@ -87,12 +103,12 @@ def record_decision(claim_id: str, decision: Decision, db: Db) -> dict[str, Any]
         raise HTTPException(422, "Only an approved claim has a payout")
     db.execute(
         "INSERT INTO decisions VALUES (?, ?, ?, ?, ?, ?)",
-        (claim_id, *decision.model_dump().values(), now()),
+        (claim_id, *decision.model_dump().values(), store.now()),
     )
     over_limit = (
         decision.decision == "approve" and decision.payout > store.payout_limit(db)
     )
-    set_status(db, claim_id, "awaiting_signoff" if over_limit else "decided")
+    store.set_status(db, claim_id, "awaiting_signoff" if over_limit else "decided")
     db.commit()
     return claim_or_404(db, claim_id)
 
@@ -127,10 +143,11 @@ def sign_off_claim(claim_id: str, sign_off: SignOff, db: Db) -> dict[str, Any]:
     if not handler or not handler["can_approve_over_limit"]:
         raise HTTPException(403, "This handler cannot sign off payouts over the limit")
     db.execute(
-        "INSERT INTO sign_offs VALUES (?, ?, ?)", (claim_id, sign_off.handler_id, now())
+        "INSERT INTO sign_offs VALUES (?, ?, ?)",
+        (claim_id, sign_off.handler_id, store.now()),
     )
     record_payment(db, claim_id, claim["decision"]["payout"])
-    set_status(db, claim_id, "decided")
+    store.set_status(db, claim_id, "decided")
     db.commit()
     return claim_or_404(db, claim_id)
 
@@ -150,9 +167,6 @@ def list_steps(claim_id: str, db: Db) -> list[dict[str, Any]]:
 def add_step(claim_id: str, step: Step, db: Db) -> dict[str, str]:
     """Add a step the agent has taken on a claim."""
     claim_or_404(db, claim_id)
-    db.execute(
-        "INSERT INTO steps (claim_id, at, kind, text) VALUES (?, ?, ?, ?)",
-        (claim_id, now(), step.kind, step.text),
-    )
+    store.insert_step(db, claim_id, step.kind, step.text)
     db.commit()
     return {"status": "ok"}

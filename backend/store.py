@@ -2,6 +2,7 @@
 
 import json
 import sqlite3
+from datetime import UTC, datetime
 from typing import Any
 
 SUMMARY_FIELDS = (
@@ -12,6 +13,24 @@ SUMMARY_FIELDS = (
     "amount_claimed",
     "submitted_on",
 )
+
+
+def now() -> str:
+    """Return the current time in UTC, to the second."""
+    return datetime.now(UTC).isoformat(timespec="seconds")
+
+
+def set_status(conn: sqlite3.Connection, claim_id: str, status: str) -> None:
+    """Move a claim to a new status."""
+    conn.execute("UPDATE claims SET status = ? WHERE claim_id = ?", (status, claim_id))
+
+
+def insert_step(conn: sqlite3.Connection, claim_id: str, kind: str, text: str) -> None:
+    """Store one step the agent took on a claim."""
+    conn.execute(
+        "INSERT INTO steps (claim_id, at, kind, text) VALUES (?, ?, ?, ?)",
+        (claim_id, now(), kind, text),
+    )
 
 
 def record(conn: sqlite3.Connection, kind: str, id_: str) -> Any:
@@ -58,7 +77,14 @@ def claim_detail(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | No
         "decision": row_for(conn, "decisions", claim_id),
         "payment": row_for(conn, "payments", claim_id),
         "sign_off": sign_off(conn, claim_id),
+        "failures": failures(conn, claim_id),
     }
+
+
+def failures(conn: sqlite3.Connection, claim_id: str) -> int:
+    """Return how many times work on a claim has failed."""
+    sql = "SELECT failures FROM claims WHERE claim_id = ?"
+    return conn.execute(sql, (claim_id,)).fetchone()["failures"]
 
 
 def sign_off(conn: sqlite3.Connection, claim_id: str) -> Any:

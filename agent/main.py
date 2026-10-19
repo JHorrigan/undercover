@@ -39,7 +39,8 @@ def add_step(claim_id: str, kind: str, text: str) -> None:
 def start(claim_id: str) -> str:
     """Mark the claim in progress and return the agent's instructions."""
     with tools.backend() as client:
-        client.post(f"/api/claims/{claim_id}/start").raise_for_status()
+        run = client.post("/api/runs", json={"cap": 1}).raise_for_status().json()
+        client.post(f"/api/claims/{claim_id}/start", json=run).raise_for_status()
         return client.get("/api/instructions").raise_for_status().text
 
 

@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from pathlib import Path
 
 import pytest
@@ -46,7 +47,9 @@ def stub(payout):
 
 @pytest.fixture(autouse=True)
 def use_test_backend(monkeypatch):
-    monkeypatch.setattr(tools, "backend", lambda: TestClient(app))
+    with TestClient(app) as started:
+        monkeypatch.setattr(tools, "backend", lambda: nullcontext(started))
+        yield
 
 
 def claim():
@@ -107,7 +110,8 @@ def test_run_agent_route(monkeypatch, client):
     assert client.post("/api/claims/CLM-1001/run").json() == {"status": "started"}
     assert started == ["CLM-1001"]
     assert client.post("/api/claims/CLM-9999/run").status_code == 404
-    client.post("/api/claims/CLM-1002/start")
+    run = client.post("/api/runs", json={"cap": 1}).json()
+    client.post("/api/claims/CLM-1002/start", json=run)
     assert client.post("/api/claims/CLM-1002/run").status_code == 409
 
 
