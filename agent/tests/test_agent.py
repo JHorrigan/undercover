@@ -1,88 +1,90 @@
-from contextlib import nullcontext
 from pathlib import Path
 
 import pytest
-from fastapi.testclient import TestClient
-from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
 from langchain_core.messages import AIMessage, ToolMessage
 
-from agent import main, model, tools
-from backend import runs
-from backend.main import app
+from agent import claim, model, runs, tools
+from agent.tests.conftest import StubModel, decide, stub
+from backend import runs as run_routes
 
 
-class StubModel(GenericFakeChatModel):
-    """A chat model that gives scripted replies in place of a real model."""
+class FailingModel(StubModel):
+    """A stub model that raises a provider error a set number of times first."""
 
-    def bind_tools(self, tools, **kwargs):
-        return self
+    failures: int = 0
 
-
-def call_tool(name, args, id_):
-    return AIMessage(content="", tool_calls=[{"name": name, "args": args, "id": id_}])
-
-
-def decision(payout):
-    return {
-        "claim_id": "CLM-1001",
-        "decision": "approve",
-        "payout": payout,
-        "reason": "A covered delay with receipts.",
-        "policy_section": "3. Trip Delay",
-    }
-
-
-def stub(payout):
-    return StubModel(
-        messages=iter(
-            [
-                call_tool("get_claim", {"claim_id": "CLM-1001"}, "1"),
-                call_tool("record_decision", decision(payout), "2"),
-                call_tool("pay_claim", {"claim_id": "CLM-1001", "amount": payout}, "3"),
-                AIMessage(content="Decided."),
-            ]
-        )
-    )
+    def _generate(self, *args, **kwargs):
+        if self.failures:
+            self.failures -= 1
+            raise RuntimeError("Provider returned 502")
+        return super()._generate(*args, **kwargs)
 
 
 @pytest.fixture(autouse=True)
-def use_test_backend(monkeypatch):
-    with TestClient(app) as started:
-        monkeypatch.setattr(tools, "backend", lambda: nullcontext(started))
-        yield
+def no_retry_wait(monkeypatch):
+    monkeypatch.setattr(
+        "langchain.agents.middleware.model_retry.time.sleep", lambda _: None
+    )
 
 
-def claim():
-    with TestClient(app) as client:
-        return client.get("/api/claims/CLM-1001").json()
+def steps(client, claim_id="CLM-1001"):
+    return client.get(f"/api/claims/{claim_id}/steps").json()
 
 
-def test_run_approves_and_pays():
-    assert main.run("CLM-1001", "thread-1", stub(420.0)) == "Decided."
-    result = claim()
-    assert result["status"] == "decided"
-    assert result["payment"]["amount"] == 420.0
-    with TestClient(app) as client:
-        steps = client.get("/api/claims/CLM-1001/steps").json()
-    assert [s["kind"] for s in steps] == [
-        "tool",
-        "result",
-        "tool",
-        "result",
-        "tool",
-        "result",
-        "reply",
+def test_run_one_approves_and_pays(use_test_backend):
+    report = claim.run_one("CLM-1001", stub(*decide("CLM-1001")))
+    assert report == "CLM-1001: approve, $420.00, paid"
+    reads = [s["text"] for s in steps(use_test_backend) if s["kind"] == "read"]
+    assert reads == [
+        "Policy wording: 3. Trip Delay",
+        "Claims manual: 10. Meals without receipts",
     ]
+    assert steps(use_test_backend)[-1]["kind"] == "reply"
+    assert use_test_backend.get("/api/runs/latest").json()["summary"] == report
 
 
-def test_payment_over_limit_is_blocked():
-    main.run("CLM-1001", "thread-1", stub(1500.0))
-    result = claim()
-    assert result["status"] == "awaiting_signoff"
-    assert result["payment"] is None
-    with TestClient(app) as client:
-        steps = client.get("/api/claims/CLM-1001/steps").json()
-    assert "Error 403" in steps[-2]["text"]
+def test_payment_over_limit_is_blocked(use_test_backend):
+    report = claim.run_one("CLM-1001", stub(*decide("CLM-1001", 1500.0)))
+    assert report == "CLM-1001: approve, $1,500.00, waiting for sign-off"
+    assert "Error 403" in steps(use_test_backend)[-2]["text"]
+
+
+def test_model_error_is_retried(use_test_backend):
+    flaky = FailingModel(messages=iter(decide("CLM-1001")), failures=1)
+    assert claim.run_one("CLM-1001", flaky) == "CLM-1001: approve, $420.00, paid"
+
+
+def test_failed_claim_goes_back_in_the_queue(use_test_backend):
+    run_id = runs.create_run(1)
+    broken = FailingModel(messages=iter([]), failures=3)
+    report = claim.work_claim("CLM-1001", run_id, broken)
+    assert report.startswith("CLM-1001 failed: RuntimeError: Provider returned 502")
+    assert report.endswith("Back in the queue")
+    assert runs.get_claim("CLM-1001")["status"] == "waiting"
+    assert steps(use_test_backend)[-1]["kind"] == "error"
+
+
+def test_stopping_without_a_decision_is_a_failure():
+    run_id = runs.create_run(1)
+    gives_up = stub(*decide("CLM-1001")[:2], AIMessage(content="I can't decide."))
+    report = claim.work_claim("CLM-1001", run_id, gives_up)
+    assert "Stopped without recording a decision" in report
+    assert runs.get_claim("CLM-1001")["failures"] == 1
+
+
+def test_failing_twice_leaves_claim_for_handler():
+    broken = FailingModel(messages=iter([]), failures=6)
+    report = claim.run_one("CLM-1001", broken)
+    assert report.endswith("Left for a handler")
+    assert runs.get_claim("CLM-1001")["status"] == "needs_handler"
+
+
+def test_claim_not_started_is_reported():
+    run_id = runs.create_run(1)
+    claim.work_claim("CLM-1001", run_id, stub(*decide("CLM-1001")))
+    report = claim.work_claim("CLM-1002", run_id, stub())
+    assert report.startswith("CLM-1002 not started: Error 409")
+    assert "cap of 1" in report
 
 
 def test_tools_read_records():
@@ -97,21 +99,30 @@ def test_tools_read_records():
     assert tools.get_claim.invoke({"claim_id": "CLM-9999"}).startswith("Error 404")
 
 
+def test_claim_instructions():
+    text = claim.instructions()
+    assert text.startswith("# Working a claim")
+    assert "claims manual" in text
+    assert "evals" not in text
+
+
 def test_agent_only_uses_the_api():
-    for source in Path(main.__file__).parent.glob("*.py"):
+    for source in Path(claim.__file__).parent.glob("*.py"):
         code = source.read_text(encoding="utf-8")
         for forbidden in ("pathlib", "open(", "data/", "evals", "sqlite"):
             assert forbidden not in code, f"{source.name} uses {forbidden}"
 
 
-def test_run_agent_route(monkeypatch, client):
+def test_run_agent_route(monkeypatch, use_test_backend):
+    client = use_test_backend
     started = []
-    monkeypatch.setattr(runs.agent, "run", lambda claim_id, _: started.append(claim_id))
+    monkeypatch.setattr(run_routes.agent, "run_one", started.append)
     assert client.post("/api/claims/CLM-1001/run").json() == {"status": "started"}
     assert started == ["CLM-1001"]
     assert client.post("/api/claims/CLM-9999/run").status_code == 404
-    run = client.post("/api/runs", json={"cap": 1}).json()
-    client.post("/api/claims/CLM-1002/start", json=run)
+    run_id = runs.create_run(1)
+    assert client.post("/api/claims/CLM-1002/run").status_code == 409
+    client.post("/api/claims/CLM-1002/start", json={"run_id": run_id})
     assert client.post("/api/claims/CLM-1002/run").status_code == 409
 
 
@@ -131,10 +142,10 @@ def test_section_read_is_a_read_step():
         name="read_section",
         tool_call_id="1",
     )
-    assert main.describe(message) == [("read", "Claims manual: 9. Repeat claims")]
+    assert claim.describe(message) == [("read", "Claims manual: 9. Repeat claims")]
     missing = ToolMessage(
         content="Claims manual\nError 404: missing",
         name="read_section",
         tool_call_id="2",
     )
-    assert main.describe(missing)[0][0] == "result"
+    assert claim.describe(missing)[0][0] == "result"

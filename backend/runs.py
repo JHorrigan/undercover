@@ -2,21 +2,15 @@
 
 import sqlite3
 from typing import Annotated
-from uuid import uuid4
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 
-from agent import main as agent
-from backend import store
+from agent import claim as agent
+from backend import run_store, store
 from backend.db import get_db
 
 router = APIRouter(prefix="/api")
 Db = Annotated[sqlite3.Connection, Depends(get_db)]
-
-
-def run_in_background(claim_id: str) -> None:
-    """Run the agent on one claim with a new thread."""
-    agent.run(claim_id, f"{claim_id}-{uuid4().hex[:8]}")
 
 
 @router.post("/claims/{claim_id}/run", operation_id="run_agent")
@@ -27,5 +21,7 @@ def run_agent(claim_id: str, tasks: BackgroundTasks, db: Db) -> dict[str, str]:
         raise HTTPException(404, "Claim not found")
     if claim["status"] != "waiting":
         raise HTTPException(409, "Only a waiting claim can be run")
-    tasks.add_task(run_in_background, claim_id)
+    if run_store.running(db):
+        raise HTTPException(409, "A run is already going")
+    tasks.add_task(agent.run_one, claim_id)
     return {"status": "started"}

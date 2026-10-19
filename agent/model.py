@@ -3,6 +3,7 @@
 import os
 
 from dotenv import load_dotenv
+from langchain.agents.middleware import ModelRetryMiddleware
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 
@@ -23,3 +24,8 @@ def model() -> ChatOpenAI:
         reasoning_effort=None if name else "low",
         timeout=TIMEOUT_SECONDS,
     )
+
+
+def retry() -> ModelRetryMiddleware:
+    """Retry a failed model call twice, then raise so the claim is put right."""
+    return ModelRetryMiddleware(max_retries=2, on_failure="error")

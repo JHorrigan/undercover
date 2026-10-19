@@ -55,7 +55,7 @@ test("a payout over $1,000 is held until a handler signs off", async ({
 test("the agent's instructions are read only", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Instructions" }).click();
-  await expect(page.getByText("# UnderCover Agent")).toBeVisible();
+  await expect(page.getByText("# Working a claim")).toBeVisible();
   await expect(page.getByRole("textbox")).toHaveCount(0);
   await expect(page.getByRole("button")).toHaveCount(0);
 });

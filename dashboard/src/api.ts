@@ -136,7 +136,7 @@ export const api = {
   customer: (id: string) => getJson<Customer>(`/api/customers/${id}`),
   handlers: () => getJson<Handler[]>("/api/handlers"),
   steps: (id: string) => getJson<Step[]>(`/api/claims/${id}/steps`),
-  instructions: () => getText("/api/instructions"),
+  instructions: () => getText("/api/instructions/claim"),
   runAgent: (id: string) =>
     postJson<{ status: string }>(`/api/claims/${id}/run`, {}),
   signOff: (id: string, handlerId: string) =>

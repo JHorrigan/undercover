@@ -103,20 +103,20 @@ The backend records runs and enforces the guarantees, before any agent uses them
 
 The pilot's agent becomes the claim agent: a clean thread per claim, the manual by section, a one-line report, and failures recorded.
 
-- `agent/claim.py`: `run_claim(claim_id, run_id, attempt, llm)` starts the claim against the run, builds the agent with `ModelRetryMiddleware` and the claim instructions, streams and logs steps as now, and returns the agent's one-line report.
-- `work_claim(claim_id, run_id, llm)`: runs `run_claim` inside the one `try/except Exception`; on an exception, or if the claim is still `in_progress` afterwards, calls `fail_claim` and returns `CLM-1004 failed: <error>. Back in the queue` (or `Left for a handler`).
+- `agent/claim.py`: `run_claim(claim_id, llm)` builds the agent on a fresh thread with `ModelRetryMiddleware` and the claim instructions, streams and logs steps as now, and returns the agent's one-line report.
+- `work_claim(claim_id, run_id, llm)`: starts the claim against the run (reporting a refusal, such as the cap, in one line), runs `run_claim` inside the one `try/except Exception`; on an exception, or if the claim is still `in_progress` afterwards, calls `fail_claim` and returns `CLM-1004 failed: <error>. Back in the queue` (or `Left for a handler`).
 - `backend/instructions/claim.md`: written from the policy wording and the manual (never from `data/evals/`): look up the contents, read the sections the claim needs (the benefit, the exclusions, section 10 of the wording; the manual's documents, payout, repeat claims, meals and interpretation sections as they apply), decide, record, pay, and reply in one line with the decision and payout.
-- `run_agent` (one named claim) creates a run with a cap of 1 and calls `work_claim`.
+- `run_one(claim_id)` creates a run with a cap of 1, calls `work_claim` (a second time if the first fails) and finishes the run; `run_agent` runs it in the background.
 - `uv run -m agent CLM-1001` still runs one named claim.
 
 **Success criteria**
-- [ ] `uv run pytest agent` passes on a stub model.
-- [ ] A stub that reads two sections, decides and pays leaves the claim `decided`, logs two `read` steps, and returns a one-line report.
-- [ ] A stub model that raises leaves the claim `waiting` with one failure and an error step; `work_claim` returns the failure line without raising.
-- [ ] A stub that stops without a decision is treated as a failure.
-- [ ] Two failing attempts leave the claim `needs_handler`.
-- [ ] A test proves `ModelRetryMiddleware` retries a model error once and the claim is still decided.
-- [ ] `GET /api/instructions/claim` returns the claim instructions; a test checks they mention the claims manual and not `data/evals`.
+- [x] `uv run pytest agent` passes on a stub model.
+- [x] A stub that reads two sections, decides and pays leaves the claim `decided`, logs two `read` steps, and returns a one-line report.
+- [x] A stub model that raises leaves the claim `waiting` with one failure and an error step; `work_claim` returns the failure line without raising.
+- [x] A stub that stops without a decision is treated as a failure.
+- [x] Two failing attempts leave the claim `needs_handler`.
+- [x] A test proves `ModelRetryMiddleware` retries a model error once and the claim is still decided.
+- [x] `GET /api/instructions/claim` returns the claim instructions; a test checks they mention the claims manual and not `data/evals`.
 
 ## Phase 4: The queue agent
 

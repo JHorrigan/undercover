@@ -2,7 +2,7 @@
 
 import sqlite3
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import PlainTextResponse
@@ -10,7 +10,7 @@ from fastapi.responses import PlainTextResponse
 from backend import store
 from backend.db import get_db
 
-INSTRUCTIONS = Path(__file__).parent / "instructions.md"
+INSTRUCTIONS = Path(__file__).parent / "instructions"
 
 router = APIRouter(prefix="/api")
 Db = Annotated[sqlite3.Connection, Depends(get_db)]
@@ -60,8 +60,10 @@ def list_handlers(db: Db) -> list[dict[str, Any]]:
 
 
 @router.get(
-    "/instructions", operation_id="get_instructions", response_class=PlainTextResponse
+    "/instructions/{agent}",
+    operation_id="get_instructions",
+    response_class=PlainTextResponse,
 )
-def get_instructions() -> str:
-    """Get the UnderCover Agent's instructions, as Markdown."""
-    return INSTRUCTIONS.read_text(encoding="utf-8")
+def get_instructions(agent: Literal["claim"]) -> str:
+    """Get the instructions for one of the UnderCover agents, as Markdown."""
+    return (INSTRUCTIONS / f"{agent}.md").read_text(encoding="utf-8")

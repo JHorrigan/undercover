@@ -43,7 +43,8 @@ def test_plans_and_handlers(client):
 
 
 def test_instructions(client):
-    assert client.get("/api/instructions").text.startswith("# UnderCover Agent")
+    assert client.get("/api/instructions/claim").text.startswith("# Working a claim")
+    assert client.get("/api/instructions/other").status_code == 422
 
 
 def test_list_documents(client):
