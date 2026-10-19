@@ -43,7 +43,7 @@ The claims pilot from `docs/PLAN.md` and the harness from `docs/PLAN_HARNESS.md`
 
 ## Live checks
 
-After the review in `docs/humanreview_harness.md`, three reseeded runs capped at five claims on DeepSeek V4.1 Flash, each about two minutes, with no failures. All three reached the same five outcomes as the run below, and the other 20 claims stayed waiting. The first showed the to-do list ticked off only at the end. After the queue instructions said the handlers watch it live, the second and third ticked it off one claim at a time. The third (RUN-967bc379) summed up correctly: $420.00 paid, $3,390.00 waiting for sign-off.
+After the review in `docs/REVIEW_HARNESS.md`, three reseeded runs capped at five claims on DeepSeek V4.1 Flash, each about two minutes, with no failures. All three reached the same five outcomes as the run below, and the other 20 claims stayed waiting. The first showed the to-do list ticked off only at the end. After the queue instructions said the handlers watch it live, the second and third ticked it off one claim at a time. The third (RUN-967bc379) summed up correctly: $420.00 paid, $3,390.00 waiting for sign-off.
 
 Harness, after reseeding, a run capped at five claims on DeepSeek V4.1 Flash, started from the dashboard (RUN-0a050d67, about three minutes). The to-do list filled in and was ticked off one claim at a time; the other 20 claims stayed waiting; no failures.
 
