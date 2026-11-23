@@ -2,7 +2,7 @@
 
 **A worked example.** Figures marked *invented* are made up. Figures marked *from the data* are worked out from the files in `data/`. See `README.md`.
 
-21 to 25 September 2026.
+11 to 17 November 2026.
 
 ## Why this step
 
@@ -36,12 +36,12 @@ From June to August the queue grows by over 400 claims a month. That backlog is 
 | Days from submitted to decided, June to August | 16 working days, median | As above. *Invented* |
 | Cost of a handler hour, fully loaded | $40 | Finance. *Invented* |
 | Handling cost per claim | $36 | 54 minutes at $40 an hour. *Invented* |
-| Temporary staff for the 2025 peak | $48,000 | Finance. *Invented* |
+| Temporary staff for the 2026 peak | $48,000 | Finance. *Invented* |
 | Share of claims decided without a handler | 0% | Every claim is worked by hand today |
 
 ## Quality
 
-Nobody checked decisions before discovery, so we measured it. From 22 to 24 September each handler re-decided recent claims from the claims system that someone else had decided, without seeing the first decision.
+Nobody checked decisions before discovery, so we measured it. On 16 and 17 November each handler re-decided recent claims from the claims system that someone else had decided, without seeing the first decision.
 
 | Measure | Figure | Source |
 |---|---|---|

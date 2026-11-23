@@ -2,7 +2,7 @@
 
 **A worked example.** The figures, meetings and sign-off below are invented. See `README.md`.
 
-Presented to the project committee on Friday 2 October 2026.
+Presented to the project committee on Friday 20 November 2026.
 
 ## Why this step
 
@@ -10,7 +10,7 @@ Discovery ends with a decision: the sponsor agrees the scope and the budget for 
 
 ## The problem
 
-UnderCover decides about 6,600 claims a year by hand, at about $36 a claim. From June to August claims arrive faster than the team can decide them: the median wait goes from 3 to 16 working days, and the 2025 peak needed $48,000 of temporary staff. About 60% of claims are routine, and they take most of the handlers' time. See `05_baseline.md`.
+UnderCover decides about 6,600 claims a year by hand, at about $36 a claim. From June to August claims arrive faster than the team can decide them: the median wait goes from 3 to 16 working days, and the 2026 peak needed $48,000 of temporary staff. About 60% of claims are routine, and they take most of the handlers' time. See `05_baseline.md`.
 
 ## What it is worth
 
@@ -53,7 +53,7 @@ The first eight are checked at the end of R&D. The last two are checked in the i
 
 ## R&D scope
 
-Six weeks, from 5 October 2026:
+Six weeks, from 23 November 2026:
 
 1. Load the data and score a first agent on the development set.
 2. Compare models and prompts on the evals, with cost per claim.
@@ -72,7 +72,7 @@ R&D ends with the sponsor deciding whether to build. Nothing goes live in R&D, a
 
 ## The decision
 
-On 2 October 2026 the sponsor agreed the scope and the R&D plan above, with the budget <TBD: the agreed figure>. Conditions:
+On 20 November 2026 the sponsor agreed the scope and the R&D plan above, with the budget <TBD: the agreed figure>. Conditions:
 
 - The supplier review of the model provider is finished before development.
 - The success criteria above are the bar for the build decision.

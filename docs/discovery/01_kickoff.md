@@ -2,7 +2,7 @@
 
 **A worked example.** The meeting, quotes and figures below are invented. See `README.md`.
 
-Monday 7 September 2026, 90 minutes, at UnderCover's office.
+Monday 9 November 2026, 90 minutes, at UnderCover's office. The first data request was handed over at the end of the meeting.
 
 ## Why this step
 
@@ -62,14 +62,14 @@ The sponsor signs off at the end of each phase. For discovery, that sign-off is 
 - The governance above.
 - A first statement of the problem: claims decisions are slow at peak, and handlers' time goes on routine claims.
 - Three "never" rules, carried into `08_autonomy_and_risk.md`.
-- The plan for the next three weeks: interviews, a process map, data requests, a baseline, and the evals.
+- The plan for the rest of the two weeks: interviews, sitting with the handlers, a quick test on the sample, a baseline, one workshop on use cases and risk, the evals, and the sign-off on 20 November.
 
 ## Actions
 
 | Action | Owner | By |
 |---|---|---|
-| Book interviews with each handler and with finance | Head of Claims Operations | 9 September |
-| Arrange two days sitting with the handlers | Head of Claims Operations | 14 September |
-| Send the first data request | XPLORATECH | 14 September |
-| Confirm how records can be exported, and where data may be stored | Head of IT | 18 September |
-| Share the data catalog and any data owners' list | Data Governance Lead | 18 September |
+| Book interviews with each handler and with finance | Head of Claims Operations | 9 November, for the next day |
+| Arrange two days sitting with the handlers | Head of Claims Operations | 9 November, for 11 and 12 November |
+| Prepare the first export: the sample claims, their policies and customers, the plans and the settings | Head of IT | 11 November |
+| Confirm how records can be exported, and where data may be stored | Head of IT | 10 November |
+| Share the data catalog and any data owners' list | Data Governance Lead | 12 November |
