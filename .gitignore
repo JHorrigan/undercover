@@ -1,0 +1,62 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+.vite/
+*.tsbuildinfo
+coverage/
+
+# Playwright
+test-results/
+playwright-report/
+e2e/.auth/
+.playwright-mcp/
+
+# AWS and AgentCore
+.sst/
+sst-env.d.ts
+sst.pyi
+.open-next/
+cdk.out/
+.bedrock_agentcore/
+agentcore/.cli/
+agentcore/.cache/
+agentcore/aws-targets.json
+*.zip
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Claude Code's local settings
+.claude/settings.local.json
+.claude/worktrees/
+
+# Editors and operating systems
+.vscode/*
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Throwaway design prototypes
+.prototypes/

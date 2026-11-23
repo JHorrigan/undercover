@@ -1,0 +1,84 @@
+# Deploys one app's stage with SST. Called by the deploy jobs in check.yml.
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      app:
+        description: The app's folder, such as shop
+        required: true
+        type: string
+      stage:
+        description: The SST stage, such as dev or production
+        required: true
+        type: string
+      role:
+        description: The IAM role to assume, from scripts/github-deploy-role.sh
+        required: true
+        type: string
+      region:
+        description: The AWS region of the stage's account
+        required: true
+        type: string
+      settings:
+        description: The stage's settings in .env form, never secrets
+        required: false
+        type: string
+        default: ""
+      paths:
+        description: Other folders whose change deploys this app too, space separated
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: deploy-${{ inputs.app }}-${{ inputs.stage }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Skip unless the app's code changed
+        id: changed
+        env:
+          # A pull request checks out its merge with main, whose first parent is main as it is now.
+          BASE: ${{ github.event_name == 'pull_request' && 'HEAD^1' || github.event.before }}
+          APP: ${{ inputs.app }}
+          PATHS: ${{ inputs.paths }}
+        run: |
+          # shellcheck disable=SC2086
+          if git diff --quiet "$BASE" HEAD -- "$APP/" $PATHS ":!$APP/docs/"; then
+            echo "app=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "app=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.changed.outputs.app == 'true'
+        uses: astral-sh/setup-uv@v10.3.3
+      - if: steps.changed.outputs.app == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - if: steps.changed.outputs.app == 'true'
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: ${{ inputs.role }}
+          aws-region: ${{ inputs.region }}
+      - if: steps.changed.outputs.app == 'true'
+        name: Deploy the stage
+        working-directory: ${{ inputs.app }}
+        env:
+          SETTINGS: ${{ inputs.settings }}
+          STAGE: ${{ inputs.stage }}
+        run: |
+          printf '%s\n' "$SETTINGS" > ".env.$STAGE"
+          corepack enable pnpm
+          if [ -f web/package.json ]; then (cd web && pnpm install --frozen-lockfile); fi
+          pnpm install --frozen-lockfile
+          pnpm exec sst deploy --stage "$STAGE"

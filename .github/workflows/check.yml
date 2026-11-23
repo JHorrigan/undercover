@@ -1,0 +1,65 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: checks-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: corepack enable pnpm
+      - name: Install each web app and the browser for its tests
+        run: |
+          for dir in */web; do
+            [ -f "$dir/package.json" ] || continue
+            (cd "$dir" && pnpm install --frozen-lockfile && pnpm exec playwright install --with-deps chromium)
+          done
+      - run: scripts/check.sh
+
+# Deploys: two jobs per app, dev and production, each calling deploy.yml.
+# A pull request deploys dev; a merge to main deploys production. A job runs
+# only once its role variable exists (scripts/github-deploy-role.sh sets it)
+# and only when the app's folder changed (its docs/ alone don't count; `paths`
+# names other folders that count too). For an app in shop/:
+#
+#  deploy-shop-dev:
+#    needs: check
+#    if: github.event_name == 'pull_request' && vars.AWS_DEPLOY_ROLE_DEV != ''
+#    uses: ./.github/workflows/deploy.yml
+#    permissions:
+#      contents: read
+#      id-token: write
+#    with:
+#      app: shop
+#      stage: dev
+#      role: ${{ vars.AWS_DEPLOY_ROLE_DEV }}
+#      region: ${{ vars.AWS_REGION_DEV }}
+#      settings: ${{ vars.SHOP_SETTINGS_DEV }}
+#
+#  deploy-shop-production:
+#    needs: check
+#    if: github.event_name == 'push' && vars.AWS_DEPLOY_ROLE_PRODUCTION != ''
+#    uses: ./.github/workflows/deploy.yml
+#    permissions:
+#      contents: read
+#      id-token: write
+#    with:
+#      app: shop
+#      stage: production
+#      role: ${{ vars.AWS_DEPLOY_ROLE_PRODUCTION }}
+#      region: ${{ vars.AWS_REGION_PRODUCTION }}
+#      settings: ${{ vars.SHOP_SETTINGS_PRODUCTION }}
