@@ -1,6 +1,6 @@
 # Status
 
-Discovery is written up from the claims pilot spec. The baseline and success criteria are still to be agreed.
+Discovery was signed off on 2 October 2026. The `claims/` app is in R&D. The discovery record is in `docs/discovery/`.
 
 ## Apps
 
@@ -8,4 +8,4 @@ Each app is one use case from `docs/DISCOVERY.md`, in its own folder, at its own
 
 | App | What it does | Phase |
 |---|---|---|
-| `claims/` | Decides travel insurance claims with the UnderCover Agent | 1. Discovery |
+| `claims/` | Decides travel insurance claims with the UnderCover Agent | 2. R&D |
