@@ -2,7 +2,7 @@
 
 **A worked example.** The meetings and how the sets were gathered are invented. The sets, their mix and their tags are real and are in `data/evals/claims/` and `data/security/`. See `README.md`.
 
-21 September to 1 October 2026.
+12 to 19 November 2026.
 
 ## Why this step
 
@@ -22,7 +22,7 @@ UnderCover already records a decision, a payout, a calculation, the section reli
 
 Two checks before using them:
 
-- **Were they right?** The senior claims handler reviewed every recorded decision on 28 and 29 September. Where a reason was too thin to check an agent against, they rewrote it. None of the 50 decisions in the two main sets changed.
+- **Were they right?** The senior claims handler reviewed every recorded decision on 18 and 19 November. Where a reason was too thin to check an agent against, they rewrote it. None of the 50 decisions in the two main sets changed.
 - **Can they be trusted as the standard?** The agreement test in `05_baseline.md` showed handlers agree on 85% of decisions. That is the ceiling: an agent can't be held to a higher standard than the experts meet with each other.
 
 ## The sets
@@ -53,7 +53,7 @@ With the senior handler, XPLORATECH tagged each decision so failures can be grou
 
 ## The cost of a mistake
 
-Agreed with the claims finance manager on 29 September. Approve is the positive class.
+Agreed with the claims finance manager on 17 November. Approve is the positive class.
 
 | | Handler: approve | Handler: decline | Handler: refer |
 |---|---|---|---|

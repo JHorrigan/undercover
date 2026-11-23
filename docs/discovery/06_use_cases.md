@@ -2,7 +2,20 @@
 
 **A worked example.** The ideas, scores and reasoning below are invented. See `README.md`.
 
-Workshop on Tuesday 22 September 2026, two hours, with the owner, the senior claims handler, the claims finance manager and the head of IT.
+Tuesday 17 November 2026, the first half of a half-day workshop, two hours, with the owner, the senior claims handler, the claims finance manager and the head of IT. The second half covered autonomy and risk (`08_autonomy_and_risk.md`).
+
+## A quick test first
+
+**Invented results.** On Friday 13 November, the day after the handlers' recorded decisions arrived, XPLORATECH ran one short script over the 25 sample claims: one frontier model, one prompt holding the policy wording, no tools and no tuning. Its decisions were compared with the handlers'. The sponsor had agreed at the kickoff to a spend of up to $20 on this; it cost under $1.
+
+| | Right | Of |
+|---|---|---|
+| Routine claims | 14 | 15 |
+| Hard claims | 3 | 5 |
+| Claims needing the manual or the customer's history | 1 | 5 |
+| **All** | **18 (72%)** | **25** |
+
+This is not R&D. It answers one question before the workshop: is deciding claims worth R&D at all? It showed that a model reads routine claims well from the wording alone, and that most misses need the manual or the claim history, which the prompt did not have. That set the confidence score for use case 1, and it means R&D should test adding the manual.
 
 ## Why this step
 

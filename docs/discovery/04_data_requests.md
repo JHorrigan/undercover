@@ -2,7 +2,7 @@
 
 **A worked example.** The requests and dates below are invented; the files they produced are real. See `README.md`.
 
-14 to 30 September 2026.
+9 to 18 November 2026.
 
 ## Why this step
 
@@ -16,7 +16,7 @@ Each request names the system, the owner and the format, so the data can be trac
 
 ## Before anything was sent
 
-On 15 September the Head of IT and the Data Governance Lead agreed how data would be handled during discovery and R&D:
+On 10 November, before any data was sent, the Head of IT and the Data Governance Lead agreed how data would be handled during discovery and R&D:
 
 - Customer names, contact details, dates of birth and addresses are replaced with realistic invented ones before export. Claim stories and medical details are kept, because the decisions depend on them.
 - The data stays in UnderCover's own AWS account and the repo it owns. Nothing is copied to XPLORATECH's systems.
@@ -26,22 +26,22 @@ On 15 September the Head of IT and the Data Governance Lead agreed how data woul
 
 | # | Asked for | Asked | From | Owner | Arrived | Became |
 |---|---|---|---|---|---|---|
-| 1 | 25 recent claims, exported as they first arrived, before any decision, with stories, items and documents as text | 14 Sep | Claims system | Head of Claims Operations | 18 Sep | `data/claims.json` |
-| 2 | The policy behind each of those claims, and 25 more | 14 Sep | Policy administration | Product | 18 Sep | `data/policies.json` |
-| 3 | Each customer on those policies, with their claim history | 14 Sep | Customer system | Head of Claims Operations | 21 Sep | `data/customers.json` |
-| 4 | The plans and add-ons with their limits | 14 Sep | Policy administration | Product | 18 Sep | `data/plans.json`, `context/plans.yaml` |
-| 5 | The company settings: the sign-off limit, the filing window and the other numbers | 14 Sep | Claims operations | Head of Claims Operations | 16 Sep | `data/company.json`, `context/claim_rules.yaml` |
-| 6 | The handlers and who can sign off | 14 Sep | Claims operations | Head of Claims Operations | 16 Sep | `data/handlers.json` |
-| 7 | The policy wording in force | 7 Sep | Published policy documents | Legal | 8 Sep | `data/policy_wording.md`, `context/policy_wording.md` |
-| 8 | The customer-facing summary of the wording | 7 Sep | Published policy documents | Legal | 8 Sep | `data/policy_wording_short.md` |
-| 9 | The claims manual | 16 Sep | Claims operations | Head of Claims Operations | 16 Sep | `data/claims_manual.md`, `context/claims_manual.md` |
-| 10 | The data catalog entries for each field above | 16 Sep | The data catalog | Data Governance Lead | 18 Sep | `context/data_dictionary.yaml` |
-| 11 | The wording's defined terms | 16 Sep | Published policy documents | Legal | 18 Sep | `context/glossary.yaml` |
-| 12 | The outside facts handlers look up: storm warnings, strikes, where adventure sports happen, product prices | 21 Sep | Outside data providers | Head of Claims Operations | 30 Sep | `context/reference_data.yaml`, `data/knowledge.json` |
-| 13 | The decisions the handlers recorded on those 25 claims, with the payout, the working and the reason | 21 Sep | Claims system | Head of Claims Operations | 25 Sep | `data/evals/claims/decisions.json` |
-| 14 | 25 more recent claims of the same mix, with their decisions, kept back for testing | 21 Sep | Claims system | Head of Claims Operations | 25 Sep | `data/evals/claims/held_out_*.json` |
-| 15 | Harder claims: ones that took longest or were disputed | 23 Sep | Claims system and the handlers | Head of Claims Operations | 30 Sep | `data/evals/claims/harder/`, `even_harder/` |
-| 16 | Any claim where someone tried to game the process | 23 Sep | Special Investigations Unit | Head of Claims Operations | 28 Sep | `data/security/` |
+| 1 | 25 claims from the summer peak, June to September, exported as they first arrived, before any decision, with stories, items and documents as text | 9 Nov | Claims system | Head of Claims Operations | 11 Nov | `data/claims.json` |
+| 2 | The policy behind each of those claims, and 25 more | 9 Nov | Policy administration | Product | 11 Nov | `data/policies.json` |
+| 3 | Each customer on those policies, with their claim history | 9 Nov | Customer system | Head of Claims Operations | 12 Nov | `data/customers.json` |
+| 4 | The plans and add-ons with their limits | 9 Nov | Policy administration | Product | 11 Nov | `data/plans.json`, `context/plans.yaml` |
+| 5 | The company settings: the sign-off limit, the filing window and the other numbers | 9 Nov | Claims operations | Head of Claims Operations | 11 Nov | `data/company.json`, `context/claim_rules.yaml` |
+| 6 | The handlers and who can sign off | 9 Nov | Claims operations | Head of Claims Operations | 11 Nov | `data/handlers.json` |
+| 7 | The policy wording in force | 9 Nov | Published policy documents | Legal | 10 Nov | `data/policy_wording.md`, `context/policy_wording.md` |
+| 8 | The customer-facing summary of the wording | 9 Nov | Published policy documents | Legal | 10 Nov | `data/policy_wording_short.md` |
+| 9 | The claims manual | 10 Nov | Claims operations | Head of Claims Operations | 10 Nov | `data/claims_manual.md`, `context/claims_manual.md` |
+| 10 | The data catalog entries for each field above | 10 Nov | The data catalog | Data Governance Lead | 12 Nov | `context/data_dictionary.yaml` |
+| 11 | The wording's defined terms | 10 Nov | Published policy documents | Legal | 12 Nov | `context/glossary.yaml` |
+| 12 | The outside facts handlers look up: storm warnings, strikes, where adventure sports happen, product prices | 10 Nov | Outside data providers | Head of Claims Operations | 18 Nov | `context/reference_data.yaml`, `data/knowledge.json` |
+| 13 | The decisions the handlers recorded on those 25 claims, with the payout, the working and the reason | 10 Nov | Claims system | Head of Claims Operations | 12 Nov | `data/evals/claims/decisions.json` |
+| 14 | 25 more claims from the same months and of the same mix, with their decisions, kept back for testing | 10 Nov | Claims system | Head of Claims Operations | 16 Nov | `data/evals/claims/held_out_*.json` |
+| 15 | Harder claims: ones that took longest or were disputed | 10 Nov | Claims system and the handlers | Head of Claims Operations | 16 Nov | `data/evals/claims/harder/`, `even_harder/` |
+| 16 | Any claim where someone tried to game the process | 10 Nov | Special Investigations Unit | Head of Claims Operations | 16 Nov | `data/security/` |
 
 How the decisions in requests 13 to 16 were gathered is in `07_evals.md`.
 
@@ -50,7 +50,7 @@ How the decisions in requests 13 to 16 were gathered is in `07_evals.md`.
 - **The manual was not on the first list.** It was added after the interviews (request 9). Ask the people doing the work what they read, not just what is official.
 - **The policies came with 25 more than asked.** Product sent every policy for the customers in the sample. They are kept, because claim history and other policies matter.
 - **The wording and the manual are versioned.** Wording 2026.1 and manual 2026.2 are recorded in `data/company.json`. A claim is decided under the wording in force when the policy was bought (manual section 13).
-- **Outside facts were the slowest.** Handlers look them up on the web case by case. Claims operations gathered the ones the sample needed into one file.
+- **Outside facts were the slowest.** Handlers look them up on the web case by case. Claims operations keeps a list of the ones that come up most, last reviewed on 30 September, and added the facts the sample needed.
 - **Each context file names its source, owner and review date**, so anyone can check where a fact came from and when it was last confirmed.
 
 ## Enterprise data questions

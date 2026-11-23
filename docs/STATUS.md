@@ -1,6 +1,6 @@
 # Status
 
-Discovery was signed off on 2 October 2026. The `claims/` app is in R&D. The discovery record is in `docs/discovery/`.
+Discovery was signed off on 20 November 2026. The `claims/` app is in R&D. The discovery record is in `docs/discovery/`.
 
 ## Apps
 

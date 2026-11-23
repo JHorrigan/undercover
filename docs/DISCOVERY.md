@@ -2,11 +2,11 @@
 
 What we found, before anything is built. Written once for the client, before any app's `SPEC.md`. Each use case that is chosen becomes an app, and its spec is agreed from this.
 
-Discovery ran from 7 September to 2 October 2026. The full record, step by step, is in `docs/discovery/`. It is a worked example: UnderCover is fictional, and the meetings and most figures are invented.
+Discovery ran from 9 to 20 November 2026. The full record, step by step, is in `docs/discovery/`. It is a worked example: UnderCover is fictional, and the meetings and most figures are invented.
 
 - **Sponsor**: Chief Operating Officer
 - **Owner**: Head of Claims Operations
-- **Signed off**: 2 October 2026, scope and R&D plan agreed
+- **Signed off**: 20 November 2026, scope and R&D plan agreed
 
 ## The problems
 
@@ -29,7 +29,7 @@ From `docs/discovery/05_baseline.md`. Figures marked † are worked out from `da
 | Handler time per claim, average | 54 minutes |
 | Handling cost per claim | $36 |
 | Median wait, peak and off-peak | 16 and 3 working days |
-| Temporary staff at the 2025 peak | $48,000 |
+| Temporary staff at the 2026 peak | $48,000 |
 | Claims decided without a handler | 0% |
 | Handlers agreeing with each other, decision | 85% |
 | Handlers agreeing with each other, decision and payout | 75% |

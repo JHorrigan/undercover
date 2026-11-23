@@ -2,7 +2,7 @@
 
 **A worked example.** The timings below are invented. See `README.md`.
 
-Drawn from two days sitting with the handlers, 14 and 15 September 2026, and checked with the Head of Claims Operations on 16 September.
+Drawn from two days sitting with the handlers, 11 and 12 November 2026, and checked with the Head of Claims Operations on 13 November.
 
 ## Why this step
 

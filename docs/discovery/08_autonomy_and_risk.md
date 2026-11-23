@@ -2,7 +2,7 @@
 
 **A worked example.** The meetings and assessments below are invented. See `README.md`.
 
-Risk workshop on Tuesday 29 September 2026, 90 minutes, with the owner, the head of IT, the data governance lead, the claims finance manager and UnderCover's information security officer.
+Tuesday 17 November 2026, the second half of the workshop that ranked the use cases, 90 minutes, with the owner, the head of IT, the data governance lead, the claims finance manager and UnderCover's information security officer.
 
 ## Why this step
 

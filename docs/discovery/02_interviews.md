@@ -2,7 +2,7 @@
 
 **A worked example.** The interviews, quotes and figures below are invented. See `README.md`.
 
-8 to 16 September 2026.
+9 to 13 November 2026.
 
 ## Why this step
 
@@ -14,12 +14,12 @@ Ask about the work, never about the people. The aim is to give the team time bac
 
 | Who | How | When |
 |---|---|---|
-| Head of Claims Operations (the owner) | One-to-one, 60 minutes | 8 September |
-| Senior Claims Handler | One-to-one, 45 minutes | 9 September |
-| The two Claims Handlers | Together, 45 minutes | 9 September |
-| Claims Finance Manager | One-to-one, 30 minutes | 10 September |
-| All three handlers | Sitting with them while they worked, two days | 14 and 15 September |
-| Head of Claims Operations | Playback of what we found, 30 minutes | 16 September |
+| Head of Claims Operations (the owner) | One-to-one, 60 minutes | 9 November |
+| Senior Claims Handler | One-to-one, 45 minutes | 10 November |
+| The two Claims Handlers | Together, 45 minutes | 10 November |
+| Claims Finance Manager | One-to-one, 30 minutes | 10 November |
+| All three handlers | Sitting with them while they worked, two days | 11 and 12 November |
+| Head of Claims Operations | Playback of what we found, 30 minutes | 13 November |
 
 ## What we asked
 
@@ -54,7 +54,7 @@ Ask about the work, never about the people. The aim is to give the team time bac
 > "Most of my day is reading a delay claim, checking the carrier's letter, adding up receipts and taking off what the wording doesn't pay. It's careful work, but it's the same careful work every time."
 > Claims Handler
 
-**The hard claims need the manual.** At the kickoff we had asked only for the policy wording. In the interviews it became clear that the handlers decide many claims from the claims manual, which records how UnderCover reads the wording: what counts as unattended, why a monkey stealing a phone is accidental loss and not theft, and how to pay meals without receipts.
+**The hard claims need the manual.** The first data request, handed over at the kickoff, asked for the claims, the records and the policy wording, but not the claims manual. In the interviews it became clear that the handlers decide many claims from the claims manual, which records how UnderCover reads the wording: what counts as unattended, why a monkey stealing a phone is accidental loss and not theft, and how to pay meals without receipts.
 
 > "The wording tells you what's covered. The manual tells you what we actually do when a claim doesn't fit the wording. New starters learn it the hard way."
 > Senior Claims Handler
