@@ -1,6 +1,6 @@
 # Status
 
-<TBD: one line on where the engagement stands.>
+Discovery is written up from the claims pilot spec. The baseline and success criteria are still to be agreed.
 
 ## Apps
 
@@ -8,4 +8,4 @@ Each app is one use case from `docs/DISCOVERY.md`, in its own folder, at its own
 
 | App | What it does | Phase |
 |---|---|---|
-| None yet | | |
+| `claims/` | Decides travel insurance claims with the UnderCover Agent | 1. Discovery |

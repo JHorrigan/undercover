@@ -77,4 +77,4 @@ Today's stack, the same in every repo, chosen for now and reviewed as the field 
 
 ## Folders
 
-Each app is its own folder with only the folders it needs: `research/` for R&D, `agent/`, `api/` and `web/`. <TBD: the apps and what each is built with.>
+Each app is its own folder with only the folders it needs: `research/` for R&D, `agent/`, `api/` and `web/`. `claims/` decides claims; <TBD: what it is built with, chosen in its first plan.>
