@@ -14,3 +14,8 @@ dependencies = [
     "plotly>=7.1.0",
     "python-dotenv>=1.2.4",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.6",
+]

@@ -8,6 +8,11 @@ cd "$(dirname "$0")/.."
 echo "== AI smell"
 scripts/smell.sh
 
+if [ -f pyproject.toml ]; then
+  echo "== root"
+  uv run ruff format --check . && uv run ruff check .
+fi
+
 for project in */*/pyproject.toml; do
   dir=$(dirname "$project")
   echo "== $dir"
