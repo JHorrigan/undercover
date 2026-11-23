@@ -1,8 +1,8 @@
-# <TBD: client name>
+# UnderCover Travel Insurance
 
 ## The context
 
-<TBD: who the client is, what they do, and whether they are fictional.>
+UnderCover Travel Insurance is a fictional travel insurer. It sells travel insurance on three plans (Economy, Premium and First), and its three claims handlers work through a queue of claims by hand. Everything about it, including its records in `data/`, is invented.
 
 XPLORATECH is the client's forward deployed engineer. You are its coding agent.
 

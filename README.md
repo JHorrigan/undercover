@@ -1,6 +1,6 @@
-# <TBD: client name>
+# UnderCover Travel Insurance
 
-<TBD: one line on who the client is.>
+UnderCover Travel Insurance is a fictional travel insurer, and this repo holds its claims automation.
 
 Start with `AGENTS.md`.
 
