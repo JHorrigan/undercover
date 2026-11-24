@@ -48,6 +48,12 @@ def get_claim(claim_id: str, db: Db) -> dict:
     return claims.get_claim(db, claim_id)
 
 
+@app.get("/api/claims/{claim_id}/evidence", operation_id="get_claim_evidence")
+def get_claim_evidence(claim_id: str, db: Db) -> dict:
+    """Get the claim as the agent reads it, with personal details withheld."""
+    return claims.get_claim_evidence(db, claim_id)
+
+
 @app.get("/api/claims/{claim_id}/policy", operation_id="get_policy")
 def get_policy(claim_id: str, db: Db) -> dict:
     """Get the claim's policy, its plan's limits and the rules for add-ons."""

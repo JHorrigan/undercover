@@ -6,6 +6,7 @@ import sqlite3
 from fastapi import HTTPException
 
 from backend.db import data_dir
+from backend.privacy import personal_details, withhold
 
 
 def find(connection: sqlite3.Connection, table: str, key: str, value: str) -> dict:
@@ -72,6 +73,14 @@ def get_claim(connection: sqlite3.Connection, claim_id: str) -> dict:
         "payment": dict(payment) if payment else None,
         "steps": [dict(step) for step in steps],
     }
+
+
+def get_claim_evidence(connection: sqlite3.Connection, claim_id: str) -> dict:
+    """Return the claim as the agent reads it, with personal details withheld."""
+    claim = find_claim(connection, claim_id)
+    customer = find(connection, "customers", "customer_id", claim["customer_id"])
+    del claim["status"]
+    return withhold(claim, personal_details(customer))
 
 
 def take_next_claim(connection: sqlite3.Connection) -> dict | None:
