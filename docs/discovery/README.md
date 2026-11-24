@@ -1,6 +1,6 @@
 # Discovery record
 
-**A worked example.** UnderCover is a fictional client, and this record of its discovery is made up. The meetings, quotes and figures here were invented to show how a discovery produces the files in `data/`, `context/` and `docs/DISCOVERY.md`. Where a fact comes from UnderCover's data, the file is named; everything else is invented.
+**A worked example.** UnderCover is a fictional insurer, and this record of its discovery is made up. The meetings, quotes and figures here were invented to show how a discovery produces the files in `data/`, `context/` and `docs/DISCOVERY.md`. Where a fact comes from UnderCover's data, the file is named; everything else is invented.
 
 Discovery ran for two weeks, from Monday 9 November to Friday 20 November 2026. It ended with the sponsor agreeing the scope and the budget for the R&D phase.
 

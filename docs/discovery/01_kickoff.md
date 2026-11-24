@@ -8,7 +8,7 @@ Monday 9 November 2026, 90 minutes, at UnderCover's office. The first data reque
 
 Before any problem is explored, three things must be clear: who pays for the work and signs it off (the sponsor), who owns the result once it is live (the owner), and how decisions get made along the way. Without a sponsor, the work has no budget and no one to say yes at each gate. Without an owner, nobody runs it after we leave.
 
-The kickoff is also the first test of the "agent for X" trap. If the client arrives asking for an agent, the first job is to find the business problem underneath, and whether it can be measured.
+The kickoff is also the first test of the "agent for X" trap. If the business arrives asking for an agent, the first job is to find the business problem underneath, and whether it can be measured.
 
 ## Who was there
 
@@ -16,7 +16,7 @@ The kickoff is also the first test of the "agent for X" trap. If the client arri
 - Head of Claims Operations: the owner
 - Head of IT
 - Data Governance Lead
-- XPLORATECH: the forward deployed engineer
+- The forward deployed engineer
 
 ## What we asked
 
@@ -49,8 +49,8 @@ On what must never happen, three answers:
 
 | Level | Who | How often | Decides |
 |---|---|---|---|
-| Project committee | Sponsor, owner, head of IT, data governance lead, XPLORATECH | Monthly, and at each gate | Scope, risk, budget and releases |
-| Working group | Owner, a senior claims handler, an IT engineer, XPLORATECH | Weekly | What to build next, how it is evaluated, and what it found |
+| Project committee | Sponsor, owner, head of IT, data governance lead, the forward deployed engineer | Monthly, and at each gate | Scope, risk, budget and releases |
+| Working group | Owner, a senior claims handler, an IT engineer, the forward deployed engineer | Weekly | What to build next, how it is evaluated, and what it found |
 
 The firm's leadership group sets the policy and risk appetite above both. It was not involved in discovery.
 

@@ -25,4 +25,4 @@
 ## Agent instructions
 
 15. Instructions give the agent its goal, what a good result looks like, the rules it must keep and where to find what it needs. They are not step-by-step scripts of which tool to call when. Rules that must always hold are enforced in code, and the instructions only say what they are.
-16. Write instructions from the client's own documents, never from `data/evals/`.
+16. Write instructions from the business's own documents, never from `data/evals/`.

@@ -10,7 +10,7 @@ Goal: a short `SPEC.md` for the app, in its `docs/` folder, that says what the s
 ## How to run the interview
 
 - One topic at a time, in the order below. Ask, listen, then write the section into `SPEC.md` straight away and show James what you wrote.
-- Use James's words. Never invent facts, results, quotes, stats or clients. Write `<TBD: ...>` and move on.
+- Use James's words. Never invent facts, results, quotes, stats or customers. Write `<TBD: ...>` and move on.
 - If James has an existing site, read it and use what works. Pages may be drawn by JavaScript, so ask for screenshots when a fetch shows nothing.
 - An idea for later goes in the app's `IDEAS.md`, not the spec. An idea for another app goes in that app's `IDEAS.md`.
 - A standard that applies to every front-end app belongs in `docs/WEB_STANDARDS.md`, not the spec. The spec adds only what is specific to this site.

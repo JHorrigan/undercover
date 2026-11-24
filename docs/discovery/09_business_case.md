@@ -30,7 +30,7 @@ The time goes back to the handlers for the hard claims, the referrals and custom
 
 - **The model**: an estimated few cents a claim, from the claim, the wording and the reasoning in each call. Measured in R&D on the real claims, by model, as a cost per correct decision. *Estimate, to be measured.*
 - **AWS hosting**: <TBD: priced in R&D, once the architecture is chosen.>
-- **XPLORATECH's fees**: <TBD: agreed separately with the sponsor.>
+- **The engineer's fees**: <TBD: agreed separately with the sponsor.>
 
 ## Success criteria
 

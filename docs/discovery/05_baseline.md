@@ -6,9 +6,9 @@
 
 ## Why this step
 
-The baseline is how the work performs today, from the client's own records. Without it there is no way to show what the build saved, and no way to agree success criteria that mean anything.
+The baseline is how the work performs today, from UnderCover's own records. Without it there is no way to show what the build saved, and no way to agree success criteria that mean anything.
 
-Each figure needs a source and a method, so it can be measured again the same way once the build is live. When the client doesn't measure something today, measuring it becomes part of discovery, as the agreement test below shows.
+Each figure needs a source and a method, so it can be measured again the same way once the build is live. When UnderCover doesn't measure something today, measuring it becomes part of discovery, as the agreement test below shows.
 
 Cover all three: how much work there is, how long and how much it costs, and how good the decisions are.
 

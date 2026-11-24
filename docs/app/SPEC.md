@@ -1,10 +1,10 @@
 # <TBD: the name of the work>
 
-From <TBD: who at the client asked for it>.
+From <TBD: who at UnderCover asked for it>.
 
 ## How <TBD: the work> works today
 
-<TBD: in the client's own words.>
+<TBD: in UnderCover's own words.>
 
 ## The pilot
 

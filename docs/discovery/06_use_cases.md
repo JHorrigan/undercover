@@ -6,7 +6,7 @@ Tuesday 17 November 2026, the first half of a half-day workshop, two hours, with
 
 ## A quick test first
 
-**Invented results.** On Friday 13 November, the day after the handlers' recorded decisions arrived, XPLORATECH ran one short script over the 25 sample claims: one frontier model, one prompt holding the policy wording, no tools and no tuning. Its decisions were compared with the handlers'. The sponsor had agreed at the kickoff to a spend of up to $20 on this; it cost under $1.
+**Invented results.** On Friday 13 November, the day after the handlers' recorded decisions arrived, the forward deployed engineer ran one short script over the 25 sample claims: one frontier model, one prompt holding the policy wording, no tools and no tuning. Its decisions were compared with the handlers'. The sponsor had agreed at the kickoff to a spend of up to $20 on this; it cost under $1.
 
 | | Right | Of |
 |---|---|---|
