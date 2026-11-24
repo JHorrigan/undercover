@@ -69,7 +69,7 @@ Each build is one plan for one app, in two steps with a review in between: first
 - `docs/`: the documents that cover the whole client: discovery, the stack, the process, the standards, the brand, and the status of the apps
 - `docs/app/`: the files every app starts with
 - `<app>/`: one folder per app, named for what it does, such as `claims/`. It holds the app's `AGENTS.md`, with a `CLAUDE.md` holding `@AGENTS.md`, its `docs/` (`SPEC.md`, `STATUS.md`, `IDEAS.md` and `plans/`), and `research/` for the R&D phase's notebooks and scoring. A new app starts as a copy of `docs/app/`
-- `backend/`, `agent/`, `dashboard/` and `e2e/`: the app's code, at the repo root in the course's layout. See `docs/TECH_STACK.md`
+- `backend/`, `agent/`, `dashboard/` and `e2e/`: the app's code, at the repo root. See `docs/TECH_STACK.md`
 - `context/`: the client's files that become the context layer: what the data means, how the work is done, and where each piece came from
 - `data/`: the client's business data, which several apps may read
 - `data/evals/<app>/`: the client's experts' decisions, used to check that app's agent. The agent never sees them, and the app's `research/` is the one place that reads them

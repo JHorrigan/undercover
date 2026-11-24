@@ -1,6 +1,6 @@
 # Status
 
-The course's hello-world skeleton is in place, with every check passing. The spec is ready for the first plan, the pilot.
+A hello-world skeleton is in place, with every check passing. The spec is ready for the first plan, the pilot.
 
 ## Plans
 
