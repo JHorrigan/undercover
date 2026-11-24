@@ -1,36 +1,54 @@
 # Brand
 
+Matches jameshorrigan.com, where this app is shown: dark slate, a cyan accent, and soft coloured labels.
+
 ## Fonts
 
 From Google Fonts:
 
-- **Headings and body**: Instrument Sans
-- **Accent (a tagline or a quote)**: Instrument Serif
-- **Code, numbers and identifiers**: JetBrains Mono
+- **Headings and body**: Geist
+- **Code, numbers, identifiers and small capital labels**: Geist Mono
 
 ## Colours
 
-- **Primary**: Sea Green `#06D6A0`, Midnight text
-- **Secondary**: Marigold `#FFC145`, Midnight text
-- **Tertiary**: Coral `#F78C6B`, Midnight text
-- **Information**: Cerulean `#118AB2`, white text
-- **Highlight or alert**: Raspberry `#EF476F`, white text
-- **Ink on light backgrounds**: Midnight `#073B4C`
-- **Ink on dark backgrounds**: Sea Mist `#CDD8DB`
+Dark mode is the default. Each colour has a dark-mode and a light-mode value.
 
-Use Sea Green, Marigold and Coral when three things sit side by side, such as a claim's states or chart series. Add Cerulean fourth and Raspberry fifth.
+| Use | Dark | Light |
+|---|---|---|
+| Page background | `#020617` | `#EAF5F8` |
+| Panels and cards | `#0F172A` | `#FFFFFF` |
+| Raised surfaces, such as inputs | `#1E293B` | `#F1F5F9` |
+| Text | `#E2E8F0` | `#0F172A` |
+| Secondary text | `#CBD5E1` | `#1E293B` |
+| Muted text | `#94A3B8` | `#475569` |
+| Borders | `#334155` | `#E2E8F0` |
+| Accent: links, focus, the main button | `#22D3EE` | `#0891B2` |
+| Text on the main button | `#0F172A` | `#FFFFFF` |
+
+## Labels
+
+For statuses, tags and chart series, in this order:
+
+| Label | Dark | Light |
+|---|---|---|
+| Cyan | `#67E8F9` | `#0891B2` |
+| Emerald | `#6EE7B7` | `#065F46` |
+| Amber | `#FCD34D` | `#92400E` |
+| Violet | `#C4B5FD` | `#5B21B6` |
+| Rose | `#FDA4AF` | `#9F1239` |
+
+A label is a pill: fully rounded, its text in the label colour in small capitals of Geist Mono, on the same colour at 10% opacity with a border at 30%. Rose is for alerts, such as a refused payment.
 
 ## Surfaces
 
-- **Light mode**: page background `#F0F4F5`, white panels and cards
-- **Dark mode**: page background `#04232E`, black panels and cards
-
-Panels are rounded with no outline. Sea Green and Marigold are too bright for small text, so darken them for headings and body text on light backgrounds and lighten them on dark ones.
+- Panels and cards are rounded, with a 1px border in the border colour on dark backgrounds and the accent on light ones.
+- The main button is a rounded pill in the accent colour. A secondary button is the same shape with an accent border and no fill.
+- A short vertical rule in a label colour may mark a heading or a figure.
 
 ## Avoid
 
-- Borders on one edge of a panel, and thin lines across the top of the page
 - Heavy use of gradient fills
+- Colour as the only signal: every status also says its name in text
 
 ## Tone
 

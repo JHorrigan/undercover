@@ -6,7 +6,7 @@ A hello-world skeleton is in place, with every check passing. The spec is ready 
 
 | Plan | What it adds | Status |
 |---|---|---|
-| None yet | | |
+| [001](plans/001-pilot.md) | The pilot: the agent works the queue, the dashboard, scoring | Planned |
 
 ## What's built
 
