@@ -5,7 +5,7 @@
 - `dashboard/`: React, Vite and TypeScript.
 - `e2e/`: Playwright tests.
 - `data/`: the business data the backend starts from. The agent never sees `data/evals/`, which holds the answer key.
-- `claims/research/`: the R&D notebooks.
+- `claims/research/`: the R&D notebooks, and the scoring (`scoring.py`) and evaluation (`evaluate.py`) of the agent against the handlers' decisions, with their tests. It is the one place that reads `data/evals/`.
 
 Python 3.14 with uv, all in the root `pyproject.toml`. Node 24 or later, with npm. The OpenRouter key is `OPENROUTER_API_KEY` in `.env`.
 

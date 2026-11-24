@@ -18,15 +18,18 @@ const dollars = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
+/** Format an amount in US dollars, such as $1,250.00. */
 export function money(amount: number): string {
   return dollars.format(amount);
 }
 
+/** Turn a code such as trip_delay into words, such as Trip delay. */
 export function words(value: string): string {
   const spaced = value.replaceAll("_", " ");
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
+/** Return the text of an error, for the screen. */
 export function message(reason: unknown): string {
   return reason instanceof Error ? reason.message : String(reason);
 }

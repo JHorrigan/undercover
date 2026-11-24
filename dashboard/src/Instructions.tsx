@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "./api";
 import { message } from "./format";
 
+/** The agent's instructions, read only. */
 export function Instructions() {
   const [text, setText] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

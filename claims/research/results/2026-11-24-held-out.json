@@ -1,0 +1,191 @@
+{
+  "set": "held-out",
+  "scores": {
+    "claims": 25,
+    "decision_accuracy": 0.72,
+    "accuracy": 0.72,
+    "kappa": 0.5165745856353591,
+    "wrong_declines": 2,
+    "cost_of_mistakes": 3355.0,
+    "straight_through_rate": 0.76,
+    "paid_over_limit": 0,
+    "model_cost_per_claim": 0.0007329810000000001
+  },
+  "results": [
+    {
+      "claim_id": "CLM-1101",
+      "decision": "approve",
+      "payout": 580.0,
+      "paid": true,
+      "cost": 0.0007592850000000001
+    },
+    {
+      "claim_id": "CLM-1102",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.0006645900000000001
+    },
+    {
+      "claim_id": "CLM-1103",
+      "decision": "approve",
+      "payout": 956.0,
+      "paid": true,
+      "cost": 0.00078646
+    },
+    {
+      "claim_id": "CLM-1104",
+      "decision": "approve",
+      "payout": 250.0,
+      "paid": true,
+      "cost": 0.000732475
+    },
+    {
+      "claim_id": "CLM-1105",
+      "decision": "approve",
+      "payout": 2400.0,
+      "paid": false,
+      "cost": 0.0007353100000000001
+    },
+    {
+      "claim_id": "CLM-1106",
+      "decision": "approve",
+      "payout": 250.0,
+      "paid": true,
+      "cost": 0.000824005
+    },
+    {
+      "claim_id": "CLM-1107",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00067948
+    },
+    {
+      "claim_id": "CLM-1108",
+      "decision": "approve",
+      "payout": 66.0,
+      "paid": true,
+      "cost": 0.0007352799999999999
+    },
+    {
+      "claim_id": "CLM-1109",
+      "decision": "approve",
+      "payout": 890.0,
+      "paid": true,
+      "cost": 0.000779355
+    },
+    {
+      "claim_id": "CLM-1110",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.0006485449999999999
+    },
+    {
+      "claim_id": "CLM-1111",
+      "decision": "approve",
+      "payout": 4600.0,
+      "paid": false,
+      "cost": 0.0007747100000000001
+    },
+    {
+      "claim_id": "CLM-1112",
+      "decision": "approve",
+      "payout": 680.0,
+      "paid": true,
+      "cost": 0.00077772
+    },
+    {
+      "claim_id": "CLM-1113",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00069891
+    },
+    {
+      "claim_id": "CLM-1114",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000669565
+    },
+    {
+      "claim_id": "CLM-1115",
+      "decision": "approve",
+      "payout": 730.0,
+      "paid": true,
+      "cost": 0.000719625
+    },
+    {
+      "claim_id": "CLM-1116",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.0007882400000000001
+    },
+    {
+      "claim_id": "CLM-1117",
+      "decision": "approve",
+      "payout": 780.0,
+      "paid": true,
+      "cost": 0.00071045
+    },
+    {
+      "claim_id": "CLM-1118",
+      "decision": "approve",
+      "payout": 1880.0,
+      "paid": false,
+      "cost": 0.0008834699999999999
+    },
+    {
+      "claim_id": "CLM-1119",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000637765
+    },
+    {
+      "claim_id": "CLM-1120",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.0007247849999999999
+    },
+    {
+      "claim_id": "CLM-1121",
+      "decision": "approve",
+      "payout": 490.0,
+      "paid": true,
+      "cost": 0.00078184
+    },
+    {
+      "claim_id": "CLM-1122",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00070187
+    },
+    {
+      "claim_id": "CLM-1123",
+      "decision": "approve",
+      "payout": 89.0,
+      "paid": true,
+      "cost": 0.00073505
+    },
+    {
+      "claim_id": "CLM-1124",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00063546
+    },
+    {
+      "claim_id": "CLM-1125",
+      "decision": "approve",
+      "payout": 100.0,
+      "paid": true,
+      "cost": 0.00074028
+    }
+  ]
+}

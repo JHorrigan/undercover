@@ -25,6 +25,7 @@ function Counts({ claims }: Readonly<{ claims: QueueClaim[] }>) {
   );
 }
 
+/** The claims queue, oldest first, with counts by status. */
 export function Queue() {
   const { data, error } = useLive(api.queue, 2000, (claims) =>
     claims.some((claim) => claim.status !== "decided"),

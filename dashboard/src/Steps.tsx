@@ -7,6 +7,7 @@ function time(recordedAt: string): string {
   });
 }
 
+/** The agent's steps on a claim, as they happen, with the model cost. */
 export function Steps({
   steps,
   working,

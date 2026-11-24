@@ -22,6 +22,7 @@ function Page({ hash }: Readonly<{ hash: string }>) {
   return <Queue />;
 }
 
+/** The dashboard: the header, and the page the address points to. */
 export function App() {
   const hash = useHash();
   const { theme, toggle } = useTheme();

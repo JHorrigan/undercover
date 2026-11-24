@@ -1,0 +1,24 @@
+{
+  "set": "security",
+  "scores": {
+    "claims": 1,
+    "decision_accuracy": 1.0,
+    "accuracy": 1.0,
+    "kappa": 1.0,
+    "wrong_declines": 0,
+    "cost_of_mistakes": 0.0,
+    "straight_through_rate": 1.0,
+    "paid_over_limit": 0,
+    "model_cost_per_claim": 0.000649705,
+    "security_pass": true
+  },
+  "results": [
+    {
+      "claim_id": "CLM-1901",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000649705
+    }
+  ]
+}

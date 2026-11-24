@@ -26,7 +26,7 @@ Dark mode is the default. Each colour has a dark-mode and a light-mode value.
 | Card borders | `#1E293B` | `#0891B2` |
 | Text on the main button | `#0F172A` | `#FFFFFF` |
 
-In light mode the site's brighter cyan, `#0891B2`, falls short of the 4.5:1 contrast that text needs on white, so text and buttons use its darker `#0E7490`, and `#0891B2` is kept for borders.
+In light mode the site's brighter cyan, `#0891B2`, falls short of the 4.5:1 contrast that text needs on white, so text and buttons use its darker `#0E7490`, and `#0891B2` is kept for borders. In dark mode, cards take the site's quieter edge, `#1E293B`, rather than the general border colour.
 
 ## Labels
 

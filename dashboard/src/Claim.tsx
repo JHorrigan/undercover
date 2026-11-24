@@ -105,6 +105,7 @@ function Outcome({
   );
 }
 
+/** One claim in full, kept up to date while the agent works on it. */
 export function Claim({ id }: Readonly<{ id: string }>) {
   const load = useCallback(() => api.claim(id), [id]);
   const {

@@ -9,6 +9,7 @@ interface Props {
   onChange: () => void;
 }
 
+/** A handler's sign-off and payment for a payout over the limit. */
 export function SignOff({
   claimId,
   payout,

@@ -1,6 +1,6 @@
 # Plan 001: The pilot
 
-- **Status:** In progress
+- **Status:** Done
 - **Spec:** `claims/docs/SPEC.md` as of `15592f7`
 - **Branch:** `claims-001-pilot`
 
@@ -14,7 +14,7 @@ The UnderCover Agent works the claims queue end to end. The backend holds the cl
 2. **Most web standards don't apply yet.** The dashboard runs locally with no sign-in and no visitors, so SEO, AEO, analytics, cookie consent, legal pages and uptime monitoring are left out. Accessibility (WCAG 2.2 AA, checked with axe) and keyboard use apply.
 3. **Langfuse comes in Plan 002.** `AGENTS.md` asks for every run traced in Langfuse and the evals kept as a Langfuse dataset. That needs a Langfuse account and key, approved first. This plan scores the agent in code; Plan 002 adds the traces, the dataset and experiments.
 4. **The agent works out the payout.** The spec gives that job to the agent. `docs/DISCOVERY.md` suggests building the payout calculation as code. That is left for a later plan, once the scores show where payouts go wrong.
-5. **Live runs cost money.** Phase 5 runs the real model on the claims. The cost per claim isn't known yet: <TBD: measured on the five tiny claims first, then approved before the full runs>.
+5. **Live runs cost money.** Phase 5 runs the real model on the claims. Measured on the five tiny claims first: $0.00071 a claim. James approved the full runs, which cost $0.039 in all.
 
 ## Not in this plan
 
@@ -31,20 +31,32 @@ backend/
   seed.py          loads data/ into a fresh database
   claims.py        reading claims, policies, history and the wording
   decisions.py     the rules: recording a decision, paying, signing off
-  instructions.md  the agent's instructions, served by the API
+  privacy.py       withholding a customer's personal details from the agent
+  instructions.py  serving the agent's instructions
+  instructions.md  the agent's instructions
 agent/
   main.py          the entry point, run(claim_id, thread_id)
   harness.py       the model, the middleware that records steps, building the agent
   tools.py         one thin tool per API call
+  api.py           the agent's one way to reach the backend
   worker.py        works the queue: takes the next waiting claim until none are left
 dashboard/src/
-  api.ts           calls to the backend
+  api.ts           calls to the backend and their types
+  format.ts        money, labels and messages for the screen
   theme.css        the brand: colours, fonts and surfaces as named values
+  theme.ts         the dark and light modes
+  useLive.ts       loading data and refreshing it while it changes
   Queue.tsx        the queue
-  Claim.tsx        one claim, its decision and the agent's steps
+  Claim.tsx        one claim and its decision
+  Steps.tsx        the agent's steps on a claim
+  SignOff.tsx      a handler's sign-off and payment
+  StatusPill.tsx   a claim's status as a label
   Instructions.tsx the agent's instructions, read only
+  testing.ts       fixtures for the dashboard's tests
 claims/research/
+  scoring.py       the measures from docs/discovery/07_evals.md
   evaluate.py      runs the agent on a set of claims and scores it
+  results/         each live run's report, the record of what it scored
 ```
 
 The database path, the backend's address and the model come from environment variables with local defaults, each set in one place. The backend address the agent uses today is hard-coded in `agent/main.py`; it moves to an environment variable. Tests and the browser tests each use their own database, so they never touch the one you work with. The backend never reads `data/evals/`. The scoring script in `claims/research/` is the one place that does.
@@ -125,17 +137,17 @@ Success criteria:
 ## Phase 5: Scoring and the live runs
 
 - `claims/research/evaluate.py` builds a separate database with a chosen set of claims (the 25 development claims, the 25 held-out claims or the security claim), starts the backend on it, runs the agent on each claim and scores the decisions against the handlers'.
-- It reports decision accuracy, accuracy on decision and payout (within a dollar), Cohen's kappa, wrong declines, the cost of mistakes ($1,500 a wrong decline, the payout for a wrong approval, $50 a needless referral), the straight-through rate (claims decided and paid with no referral and no sign-off), and the model cost per claim.
+- It reports each measure as `docs/discovery/07_evals.md` defines it: decision accuracy, accuracy on decision and payout (to the cent), Cohen's kappa, wrong declines (a decline of any claim the handler didn't decline), the cost of mistakes from its cost table ($1,500 a wrong decline, the payout for a wrong approval, $50 a needless referral), the straight-through rate (approvals paid within the limit, and declines), payments over the limit, and the model cost per claim. Each report is saved in `claims/research/results/`.
 - Live runs, each only once its cost is approved: the five tiny claims first, to measure the cost per claim; then the 25 development claims, the 25 held-out claims, and the security claim.
 - The results go in `claims/docs/STATUS.md`, under Live checks, against the targets in the spec.
 
 Success criteria:
 
-- [ ] A test of the scoring with made-up decisions gives the expected accuracy, kappa and cost of mistakes.
-- [ ] The tiny run's cost per claim is reported before any full run.
-- [ ] The development and held-out runs are reported with every figure above.
-- [ ] The security claim is declined with nothing paid.
-- [ ] No payment over $1,000 was made without a sign-off in any run.
-- [ ] `npm run check` passes.
+- [x] A test of the scoring with made-up decisions gives the expected accuracy, kappa and cost of mistakes.
+- [x] The tiny run's cost per claim is reported before any full run.
+- [x] The development and held-out runs are reported with every figure above.
+- [x] The security claim is declined with nothing paid.
+- [x] No payment over $1,000 was made without a sign-off in any run.
+- [x] `npm run check` passes.
 
 The pilot is done when it runs end to end and its scores are recorded. Meeting the spec's targets is the go or no-go decision at the end of R&D, not a condition of this plan.
