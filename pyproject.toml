@@ -27,7 +27,7 @@ dev = [
 ]
 
 [tool.ruff]
-include = ["backend/**/*.py", "agent/**/*.py"]
+include = ["backend/**/*.py", "agent/**/*.py", "conftest.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "SIM", "UP", "PL", "S", "PT", "FAST", "C90", "PLR1702"]

@@ -4,7 +4,7 @@
 
 Once per machine: install `uv` and Node.js 24 or later.
 
-Once per clone: `uv sync` and `npm install` at the repo root install everything, including the pre-commit hook and Playwright's browser. `npm run dev` starts the backend and the dashboard. <TBD: how to seed the product, chosen with the database.>
+Once per clone: `uv sync` and `npm install` at the repo root install everything, including the pre-commit hook and Playwright's browser. `npm run seed` builds a fresh SQLite database from `data/`, with every claim waiting; run it first, and again whenever you want to start over. `npm run dev` starts the backend and the dashboard.
 
 ## Checks
 

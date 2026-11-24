@@ -1,6 +1,6 @@
 # Plan 001: The pilot
 
-- **Status:** Planned
+- **Status:** In progress
 - **Spec:** `claims/docs/SPEC.md` as of `15592f7`
 - **Branch:** `claims-001-pilot`
 
@@ -60,12 +60,12 @@ Load UnderCover's records into SQLite and serve the queue.
 
 Success criteria:
 
-- [ ] `npm run seed` creates the database with 25 claims, 50 policies, 49 customers, 3 plans and 3 handlers.
-- [ ] `GET /api/claims` returns 25 claims, all waiting.
-- [ ] `GET /api/claims/CLM-1001` returns the claim with its items and documents.
-- [ ] A test shows the seed never opens anything under `data/evals/`.
-- [ ] The tests run against a temporary database, and the working database is unchanged after `npm run check`.
-- [ ] `npm run check` passes.
+- [x] `npm run seed` creates the database with 25 claims, 50 policies, 49 customers, 3 plans and 3 handlers.
+- [x] `GET /api/claims` returns 25 claims, all waiting.
+- [x] `GET /api/claims/CLM-1001` returns the claim with its items and documents.
+- [x] A test shows the seed never opens anything under `data/evals/`.
+- [x] The tests run against a temporary database, and the working database is unchanged after `npm run check`.
+- [x] `npm run check` passes.
 
 ## Phase 2: Decisions, payments and sign-off
 
