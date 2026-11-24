@@ -106,10 +106,10 @@ Success criteria:
 
 ## Phase 4: The dashboard
 
-- **Queue:** every claim with its id, type, amount claimed and status, each status a brand colour with its name in text.
+- **Queue:** every claim with its id, type, amount claimed and status. Each status is a label pill from `docs/BRAND.md` with its name in text: waiting in cyan, in progress in amber, waiting for sign-off in violet, decided in emerald.
 - **Claim:** the story, items and documents; the agent's decision, payout, reason and wording section; the payment; the steps as they happen, refreshed every second while the claim is in progress; and for a claim waiting for sign-off, a handler picker and a "Sign off and pay" button.
 - **Instructions:** the agent's instructions, read only.
-- The brand from `docs/BRAND.md` in `theme.css` as named values, with light and dark modes, so a later change of look is one file. Screen text follows the brand's tone: plain US English and money as $1,250.00.
+- The brand from `docs/BRAND.md` in `theme.css` as named values, dark mode by default with a light mode, and the Geist fonts, so a later change of look is one file. Screen text follows the brand's tone: plain US English and money as $1,250.00.
 
 Success criteria:
 
