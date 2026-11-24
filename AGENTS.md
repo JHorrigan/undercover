@@ -75,7 +75,7 @@ Each build is one plan for one app, in two steps with a review in between: first
 - `data/evals/<app>/`: the client's experts' decisions, used to check that app's agent. The agent never sees them, and the app's `research/` is the one place that reads them
 - `data/security/`: cases with hidden instructions, used to test the check for them
 
-Apps stay separate. An app never uses another app's code; when it needs what another app made, its own API reads it from the database. A front end that several apps feed is an app of its own. Each app deploys on its own, and deploying one never deploys another.
+Every app shares the one backend, agent and dashboard. Each app's code is its own module in each: its routes in `backend/`, its agent in `agent/`, its pages in `dashboard/`. A second front end, such as a public site, is a sibling folder of `dashboard/`.
 
 ## Ownership
 
