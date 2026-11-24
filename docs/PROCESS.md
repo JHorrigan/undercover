@@ -2,15 +2,15 @@
 
 ## Install
 
-Once per machine: install `uv`, Node.js 24 and pnpm (`corepack enable pnpm`, or see pnpm.io), then the browser for the end-to-end tests with `pnpm exec playwright install chromium` in any `web/` folder.
+Once per machine: install `uv` and Node.js 24 or later.
 
-Once per clone: `scripts/install-hooks.sh` installs the pre-commit hook. Every worktree of the clone shares it, so a new worktree needs nothing more. Each app's dependencies install themselves the first time a check runs: `uv run` syncs the Python packages and pnpm installs the Node ones. How to run each app is in its `docs/STATUS.md`. <TBD: how to seed the product, chosen with the database.>
+Once per clone: `uv sync` and `npm install` at the repo root install everything, including the pre-commit hook and Playwright's browser. `npm run dev` starts the backend and the dashboard. <TBD: how to seed the product, chosen with the database.>
 
 ## Checks
 
-`scripts/check.sh` runs every check for every app: Ruff, mypy and pytest in each Python project, and Prettier, ESLint, `tsc --noEmit`, Vitest and Playwright with axe in each `web/` app. It stops at the first failure, and passes when there are no apps yet. The checks need no paid service: tests use stub models and stand-ins.
+`scripts/check.sh` runs every check: the AI smell check, then `npm run check`, which runs Ruff, pyright and pytest for Python, Prettier, ESLint, `tsc` and Vitest for TypeScript, and Playwright end to end. It stops at the first failure. The checks need no paid service: tests use stub models and stand-ins.
 
-The pre-commit hook runs `scripts/check.sh --fast`: the same checks without the end-to-end tests. It checks the files as they are on disk, not only what is staged, so commit or set aside unrelated changes first.
+The pre-commit hook, from `lefthook.yml`, formats the staged files, runs the Python or TypeScript checks for the part that changed, and runs the AI smell check.
 
 CI runs `scripts/check.sh` on every pull request and every push to `main` (`.github/workflows/check.yml`). Report a pull request as passing only once its checks are green on GitHub.
 

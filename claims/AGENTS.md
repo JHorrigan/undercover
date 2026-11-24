@@ -1,6 +1,6 @@
 # AGENTS.md
 
-The claims app: the UnderCover Agent decides travel insurance claims the way a handler does, and the team sees the queue and each decision. Nothing is built yet; its folders, such as `research/`, `agent/`, `api/` and `web/`, are added as its plans need them.
+The claims app: the UnderCover Agent decides travel insurance claims the way a handler does, and the team sees the queue and each decision. Its notebooks are in `research/`; its code is in `backend/`, `agent/`, `dashboard/` and `e2e/` at the repo root, as `docs/TECH_STACK.md` says.
 
 ## Start here
 

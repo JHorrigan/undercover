@@ -1,6 +1,6 @@
 # Status
 
-Nothing built yet. The spec is ready for the first plan, the pilot.
+The course's hello-world skeleton is in place, with every check passing. The spec is ready for the first plan, the pilot.
 
 ## Plans
 
@@ -10,11 +10,14 @@ Nothing built yet. The spec is ready for the first plan, the pilot.
 
 ## What's built
 
-Nothing yet.
+- `backend/`: one route, `GET /api/health`
+- `agent/`: the entry point `run(claim_id, thread_id)`, with one tool that calls the health route
+- `dashboard/`: one page that shows whether the backend is up
+- `e2e/`: one test of that page
 
 ## Run it
 
-<TBD>
+`uv sync` and `npm install` once, then `npm run dev`. `npm run check` runs every check.
 
 ## Known limits
 

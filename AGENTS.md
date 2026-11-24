@@ -61,14 +61,15 @@ These are what the client is buying, and a plan that leaves one out says why. Wh
 Each build is one plan for one app, in two steps with a review in between: first "Please plan <the work>", which writes the next numbered plan in the app's `docs/plans/` from its `docs/SPEC.md`, then "Please implement plan <number>". The app's `docs/STATUS.md` lists every plan and its status.
 
 - Build only what the documents in `docs/` ask for. Don't build ahead.
-- Never create or delete AWS resources unless asked to. A personal `sst dev` stage for local development is allowed once the plan that sets it up, and its cost, are approved.
+- Never create or delete AWS resources unless asked to.
 - The build deploys into the client's own AWS account, where the XPLORATECH platform may run alongside it. Nothing is tied to one account: no hard-coded account IDs, domains or shared resources.
 
 ### Folders
 
 - `docs/`: the documents that cover the whole client: discovery, the stack, the process, the standards, the brand, and the status of the apps
 - `docs/app/`: the files every app starts with
-- `<app>/`: one folder per app, named for what it does, such as `claims/`. It holds the app's `AGENTS.md`, with a `CLAUDE.md` holding `@AGENTS.md`, its `docs/` (`SPEC.md`, `STATUS.md`, `IDEAS.md` and `plans/`), and only the folders it needs: `research/` for the R&D phase's notebooks and scoring, one `uv` project; `agent/`; `api/`; `web/`. A new app starts as a copy of `docs/app/`
+- `<app>/`: one folder per app, named for what it does, such as `claims/`. It holds the app's `AGENTS.md`, with a `CLAUDE.md` holding `@AGENTS.md`, its `docs/` (`SPEC.md`, `STATUS.md`, `IDEAS.md` and `plans/`), and `research/` for the R&D phase's notebooks and scoring. A new app starts as a copy of `docs/app/`
+- `backend/`, `agent/`, `dashboard/` and `e2e/`: the app's code, at the repo root in the course's layout. See `docs/TECH_STACK.md`
 - `context/`: the client's files that become the context layer: what the data means, how the work is done, and where each piece came from
 - `data/`: the client's business data, which several apps may read
 - `data/evals/<app>/`: the client's experts' decisions, used to check that app's agent. The agent never sees them, and the app's `research/` is the one place that reads them
