@@ -48,3 +48,13 @@ def test_get_claim_in_full(client):
 
 def test_unknown_claim_is_not_found(client):
     assert client.get("/api/claims/CLM-0000").status_code == 404
+
+
+def test_list_handlers_without_their_contact_details(client):
+    handlers = client.get("/api/handlers").json()
+    assert handlers[0] == {
+        "handler_id": "HND-01",
+        "name": "Dana Whitfield",
+        "can_sign_off": True,
+    }
+    assert len(handlers) == 3

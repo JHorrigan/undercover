@@ -22,8 +22,11 @@ Dark mode is the default. Each colour has a dark-mode and a light-mode value.
 | Secondary text | `#CBD5E1` | `#1E293B` |
 | Muted text | `#94A3B8` | `#475569` |
 | Borders | `#334155` | `#E2E8F0` |
-| Accent: links, focus, the main button | `#22D3EE` | `#0891B2` |
+| Accent: links, focus, the main button | `#22D3EE` | `#0E7490` |
+| Card borders | `#1E293B` | `#0891B2` |
 | Text on the main button | `#0F172A` | `#FFFFFF` |
+
+In light mode the site's brighter cyan, `#0891B2`, falls short of the 4.5:1 contrast that text needs on white, so text and buttons use its darker `#0E7490`, and `#0891B2` is kept for borders.
 
 ## Labels
 
@@ -31,17 +34,17 @@ For statuses, tags and chart series, in this order:
 
 | Label | Dark | Light |
 |---|---|---|
-| Cyan | `#67E8F9` | `#0891B2` |
+| Cyan | `#67E8F9` | `#155E75` |
 | Emerald | `#6EE7B7` | `#065F46` |
 | Amber | `#FCD34D` | `#92400E` |
 | Violet | `#C4B5FD` | `#5B21B6` |
 | Rose | `#FDA4AF` | `#9F1239` |
 
-A label is a pill: fully rounded, its text in the label colour in small capitals of Geist Mono, on the same colour at 10% opacity with a border at 30%. Rose is for alerts, such as a refused payment.
+A label is a pill: fully rounded, its text in the label colour in small capitals of Geist Mono, on the same colour at 10% opacity with a border at 30%. Rose is for alerts, such as a refused payment. The light Cyan is a shade darker than the site's, so its small text keeps 4.5:1 contrast on its own tinted pill.
 
 ## Surfaces
 
-- Panels and cards are rounded, with a 1px border in the border colour on dark backgrounds and the accent on light ones.
+- Panels and cards are rounded, with a 1px border in the card border colour above.
 - The main button is a rounded pill in the accent colour. A secondary button is the same shape with an accent border and no fill.
 - A short vertical rule in a label colour may mark a heading or a figure.
 

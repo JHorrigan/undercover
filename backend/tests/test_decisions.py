@@ -116,6 +116,7 @@ def test_over_the_limit_waits_for_sign_off(client):
     claim = client.get(f"/api/claims/{CLAIM}").json()
     assert claim["status"] == "decided"
     assert claim["decision"]["signed_off_by"] == "HND-01"
+    assert claim["decision"]["signed_off_by_name"] == "Dana Whitfield"
 
 
 def test_a_handler_without_the_right_cannot_sign_off(client):

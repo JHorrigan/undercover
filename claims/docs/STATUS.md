@@ -1,6 +1,6 @@
 # Status
 
-Plan 001, the pilot, is being built. Phases 1 to 3 are done: the database and queue, the rules for decisions, payments and sign-off, and the agent.
+Plan 001, the pilot, is being built. Phases 1 to 4 are done: the database and queue, the rules for decisions, payments and sign-off, the agent, and the dashboard.
 
 ## Plans
 
@@ -12,8 +12,8 @@ Plan 001, the pilot, is being built. Phases 1 to 3 are done: the database and qu
 
 - `backend/`: a SQLite database of UnderCover's records, built by `npm run seed`, the queue, the agent's reads (policy, history, wording, instructions), and the rules: a decision is recorded once, a payment matches the approved payout and is made once, and a payout over $1,000 waits for a handler's sign-off. The agent's instructions are in `backend/instructions.md`
 - `agent/`: the UnderCover Agent. Six tools, each a thin call to the API, with the claim id set by code; the claim it reads has the customer's date of birth, street, email and phone withheld. Every tool call and model call, with its cost, is recorded as a step. `npm run agent` works the queue until it is empty
-- `dashboard/`: one page that shows whether the backend is up
-- `e2e/`: one test of that page
+- `dashboard/`: the queue with counts by status; each claim with its story, items, documents, decision and the agent's steps as they happen; a handler's sign-off for payouts over the limit; the agent's instructions, read only. Dark by default, with a light mode. The look is in `dashboard/src/theme.css`, from `docs/BRAND.md`
+- `e2e/`: browser tests of the queue, a keyboard-only sign-off and an axe check of every screen in both modes, on their own backend, dashboard and database
 
 ## Run it
 

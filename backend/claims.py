@@ -56,8 +56,13 @@ def get_claim(connection: sqlite3.Connection, claim_id: str) -> dict:
     """Return one claim in full, with its decision, payment and steps."""
     claim = find_claim(connection, claim_id)
     decision = connection.execute(
-        "SELECT decision, payout, reason, section, signed_off_by FROM decisions"
-        " WHERE claim_id = ?",
+        """
+        SELECT decision, payout, reason, section, signed_off_by,
+               handlers.record ->> '$.name' AS signed_off_by_name
+        FROM decisions
+        LEFT JOIN handlers ON handlers.handler_id = decisions.signed_off_by
+        WHERE claim_id = ?
+        """,
         (claim_id,),
     ).fetchone()
     payment = connection.execute(
@@ -73,6 +78,19 @@ def get_claim(connection: sqlite3.Connection, claim_id: str) -> dict:
         "payment": dict(payment) if payment else None,
         "steps": [dict(step) for step in steps],
     }
+
+
+def list_handlers(connection: sqlite3.Connection) -> list[dict]:
+    """Return the handlers and whether each can sign off a payout over the limit."""
+    rows = connection.execute(
+        """
+        SELECT handler_id,
+               record ->> '$.name' AS name,
+               record ->> '$.can_approve_over_limit' AS can_sign_off
+        FROM handlers ORDER BY handler_id
+        """
+    ).fetchall()
+    return [{**dict(row), "can_sign_off": bool(row["can_sign_off"])} for row in rows]
 
 
 def get_claim_evidence(connection: sqlite3.Connection, claim_id: str) -> dict:

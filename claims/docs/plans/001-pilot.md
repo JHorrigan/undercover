@@ -114,13 +114,13 @@ Success criteria:
 
 Success criteria:
 
-- [ ] Vitest tests for each screen, with the API stubbed.
-- [ ] A Playwright test: seed, open the queue, open a claim, see its story and documents.
-- [ ] A Playwright test: a claim waiting for sign-off is signed off and paid from the dashboard, and shows as decided.
-- [ ] axe finds no violations on any screen, in light and dark mode.
-- [ ] Every action works with the keyboard alone.
-- [ ] Screenshots of each screen at phone and desktop widths, checked by eye.
-- [ ] `npm run check` passes.
+- [x] Vitest tests for each screen, with the API stubbed.
+- [x] A Playwright test: seed, open the queue, open a claim, see its story and documents.
+- [x] A Playwright test: a claim waiting for sign-off is signed off and paid from the dashboard, and shows as decided.
+- [x] axe finds no violations on any screen, in light and dark mode.
+- [x] Every action works with the keyboard alone.
+- [x] Screenshots of each screen at phone and desktop widths, checked by eye.
+- [x] `npm run check` passes.
 
 ## Phase 5: Scoring and the live runs
 

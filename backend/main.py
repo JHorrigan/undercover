@@ -36,6 +36,12 @@ def list_claims(db: Db) -> list[dict]:
     return claims.list_claims(db)
 
 
+@app.get("/api/handlers", operation_id="list_handlers")
+def list_handlers(db: Db) -> list[dict]:
+    """List the handlers and whether each can sign off a payout over the limit."""
+    return claims.list_handlers(db)
+
+
 @app.post("/api/queue/next", operation_id="take_next_claim")
 def take_next_claim(db: Db) -> dict | None:
     """Move the oldest waiting claim to in progress and return it, or null."""
