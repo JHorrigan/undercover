@@ -83,11 +83,11 @@ The rules live here, so they hold whatever the agent does.
 
 Success criteria:
 
-- [ ] Tests for each rule: paying a declined claim, paying the wrong amount, paying twice and paying over $1,000 before sign-off are all refused, with a clear error.
-- [ ] A test shows a handler without the over-limit right can't sign off.
-- [ ] `GET /api/claims/CLM-1001/history` contains no date of birth, address, email or phone.
-- [ ] Every operation has an `operation_id`, a one-line docstring and no optional inputs, checked in a test against the OpenAPI schema.
-- [ ] `npm run check` passes.
+- [x] Tests for each rule: paying a declined claim, paying the wrong amount, paying twice and paying over $1,000 before sign-off are all refused, with a clear error.
+- [x] A test shows a handler without the over-limit right can't sign off.
+- [x] `GET /api/claims/CLM-1001/history` contains no date of birth, address, email or phone.
+- [x] Every operation has an `operation_id`, a one-line docstring and no optional inputs, checked in a test against the OpenAPI schema.
+- [x] `npm run check` passes.
 
 ## Phase 3: The agent
 

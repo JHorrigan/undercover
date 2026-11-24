@@ -1,9 +1,27 @@
-"""Reading claims and the queue."""
+"""Reading claims, the queue, policies, history and the wording."""
 
 import json
 import sqlite3
 
 from fastapi import HTTPException
+
+from backend.db import data_dir
+
+
+def find(connection: sqlite3.Connection, table: str, key: str, value: str) -> dict:
+    """Return one record from a table by its key, or a 404."""
+    row = connection.execute(
+        f"SELECT record FROM {table} WHERE {key} = ?",  # noqa: S608 - fixed names
+        (value,),
+    ).fetchone()
+    if row is None:
+        raise HTTPException(404, f"No {value}")
+    return json.loads(row["record"])
+
+
+def setting(connection: sqlite3.Connection, name: str) -> dict:
+    """Return one of the company's settings."""
+    return find(connection, "settings", "name", name)
 
 
 def list_claims(connection: sqlite3.Connection) -> list[dict]:
@@ -53,4 +71,48 @@ def get_claim(connection: sqlite3.Connection, claim_id: str) -> dict:
         "decision": dict(decision) if decision else None,
         "payment": dict(payment) if payment else None,
         "steps": [dict(step) for step in steps],
+    }
+
+
+def take_next_claim(connection: sqlite3.Connection) -> dict | None:
+    """Move the oldest waiting claim to in progress and return it, or None."""
+    row = connection.execute(
+        """
+        UPDATE claims SET status = 'in_progress'
+        WHERE claim_id = (
+            SELECT claim_id FROM claims WHERE status = 'waiting'
+            ORDER BY record ->> '$.submitted_on', claim_id LIMIT 1
+        )
+        RETURNING claim_id
+        """
+    ).fetchone()
+    return find_claim(connection, row["claim_id"]) if row else None
+
+
+def get_policy(connection: sqlite3.Connection, claim_id: str) -> dict:
+    """Return the claim's policy, its plan's limits and the rules for add-ons."""
+    policy = find(
+        connection,
+        "policies",
+        "policy_id",
+        find_claim(connection, claim_id)["policy_id"],
+    )
+    return {
+        "policy": policy,
+        "plan": find(connection, "plans", "plan", policy["plan"]),
+        "plan_rules": setting(connection, "plan_rules"),
+    }
+
+
+def get_claim_history(connection: sqlite3.Connection, claim_id: str) -> list[dict]:
+    """Return the customer's earlier claims, with none of their personal details."""
+    customer_id = find_claim(connection, claim_id)["customer_id"]
+    return find(connection, "customers", "customer_id", customer_id)["previous_claims"]
+
+
+def get_policy_wording(connection: sqlite3.Connection) -> dict:
+    """Return the policy wording in force and its version."""
+    return {
+        "version": setting(connection, "company")["policy_wording_version"],
+        "text": (data_dir() / "policy_wording.md").read_text(encoding="utf-8"),
     }
