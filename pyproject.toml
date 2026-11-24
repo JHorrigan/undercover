@@ -27,7 +27,7 @@ dev = [
 ]
 
 [tool.ruff]
-include = ["backend/**/*.py", "agent/**/*.py"]
+include = ["backend/**/*.py", "agent/**/*.py", "claims/research/*.py", "conftest.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "SIM", "UP", "PL", "S", "PT", "FAST", "C90", "PLR1702"]
@@ -39,9 +39,10 @@ max-complexity = 10
 
 [tool.ruff.lint.per-file-ignores]
 "*/tests/*" = ["S101", "PLR2004"]
+"claims/research/test_*.py" = ["S101", "PLR2004"]
 
 [tool.pytest.ini_options]
-testpaths = ["backend", "agent"]
+testpaths = ["backend", "agent", "claims/research"]
 pythonpath = ["."]
 addopts = "--import-mode=importlib --cov --cov-report=term-missing"
 
@@ -53,7 +54,7 @@ omit = ["*/tests/*"]
 fail_under = 80
 
 [tool.pyright]
-include = ["backend", "agent"]
+include = ["backend", "agent", "claims/research"]
 venvPath = "."
 venv = ".venv"
 pythonVersion = "3.14"

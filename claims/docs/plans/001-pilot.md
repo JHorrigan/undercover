@@ -1,6 +1,6 @@
 # Plan 001: The pilot
 
-- **Status:** Planned
+- **Status:** Done
 - **Spec:** `claims/docs/SPEC.md` as of `15592f7`
 - **Branch:** `claims-001-pilot`
 
@@ -14,7 +14,7 @@ The UnderCover Agent works the claims queue end to end. The backend holds the cl
 2. **Most web standards don't apply yet.** The dashboard runs locally with no sign-in and no visitors, so SEO, AEO, analytics, cookie consent, legal pages and uptime monitoring are left out. Accessibility (WCAG 2.2 AA, checked with axe) and keyboard use apply.
 3. **Langfuse comes in Plan 002.** `AGENTS.md` asks for every run traced in Langfuse and the evals kept as a Langfuse dataset. That needs a Langfuse account and key, approved first. This plan scores the agent in code; Plan 002 adds the traces, the dataset and experiments.
 4. **The agent works out the payout.** The spec gives that job to the agent. `docs/DISCOVERY.md` suggests building the payout calculation as code. That is left for a later plan, once the scores show where payouts go wrong.
-5. **Live runs cost money.** Phase 5 runs the real model on the claims. The cost per claim isn't known yet: <TBD: measured on the five tiny claims first, then approved before the full runs>.
+5. **Live runs cost money.** Phase 5 runs the real model on the claims. Measured on the five tiny claims first: $0.00071 a claim. James approved the full runs, which cost $0.039 in all.
 
 ## Not in this plan
 
@@ -31,20 +31,32 @@ backend/
   seed.py          loads data/ into a fresh database
   claims.py        reading claims, policies, history and the wording
   decisions.py     the rules: recording a decision, paying, signing off
-  instructions.md  the agent's instructions, served by the API
+  privacy.py       withholding a customer's personal details from the agent
+  instructions.py  serving the agent's instructions
+  instructions.md  the agent's instructions
 agent/
   main.py          the entry point, run(claim_id, thread_id)
   harness.py       the model, the middleware that records steps, building the agent
   tools.py         one thin tool per API call
+  api.py           the agent's one way to reach the backend
   worker.py        works the queue: takes the next waiting claim until none are left
 dashboard/src/
-  api.ts           calls to the backend
+  api.ts           calls to the backend and their types
+  format.ts        money, labels and messages for the screen
   theme.css        the brand: colours, fonts and surfaces as named values
+  theme.ts         the dark and light modes
+  useLive.ts       loading data and refreshing it while it changes
   Queue.tsx        the queue
-  Claim.tsx        one claim, its decision and the agent's steps
+  Claim.tsx        one claim and its decision
+  Steps.tsx        the agent's steps on a claim
+  SignOff.tsx      a handler's sign-off and payment
+  StatusPill.tsx   a claim's status as a label
   Instructions.tsx the agent's instructions, read only
+  testing.ts       fixtures for the dashboard's tests
 claims/research/
+  scoring.py       the measures from docs/discovery/07_evals.md
   evaluate.py      runs the agent on a set of claims and scores it
+  results/         each live run's report, the record of what it scored
 ```
 
 The database path, the backend's address and the model come from environment variables with local defaults, each set in one place. The backend address the agent uses today is hard-coded in `agent/main.py`; it moves to an environment variable. Tests and the browser tests each use their own database, so they never touch the one you work with. The backend never reads `data/evals/`. The scoring script in `claims/research/` is the one place that does.
@@ -60,12 +72,12 @@ Load UnderCover's records into SQLite and serve the queue.
 
 Success criteria:
 
-- [ ] `npm run seed` creates the database with 25 claims, 50 policies, 49 customers, 3 plans and 3 handlers.
-- [ ] `GET /api/claims` returns 25 claims, all waiting.
-- [ ] `GET /api/claims/CLM-1001` returns the claim with its items and documents.
-- [ ] A test shows the seed never opens anything under `data/evals/`.
-- [ ] The tests run against a temporary database, and the working database is unchanged after `npm run check`.
-- [ ] `npm run check` passes.
+- [x] `npm run seed` creates the database with 25 claims, 50 policies, 49 customers, 3 plans and 3 handlers.
+- [x] `GET /api/claims` returns 25 claims, all waiting.
+- [x] `GET /api/claims/CLM-1001` returns the claim with its items and documents.
+- [x] A test shows the seed never opens anything under `data/evals/`.
+- [x] The tests run against a temporary database, and the working database is unchanged after `npm run check`.
+- [x] `npm run check` passes.
 
 ## Phase 2: Decisions, payments and sign-off
 
@@ -74,6 +86,7 @@ The rules live here, so they hold whatever the agent does.
 - `take_next_claim`: moves the oldest waiting claim to in progress and returns it.
 - `get_policy`: the claim's policy and its plan's limits.
 - `get_claim_history`: the customer's earlier claims. Never the customer's date of birth, address, email or phone.
+- `get_claim_evidence`: the claim as the agent reads it, with the customer's date of birth, street address, email and phone withheld wherever they appear in the story or documents (James, 24 November 2026). The dashboard's `get_claim` keeps them for handlers.
 - `get_policy_wording`: the wording in force.
 - `get_instructions`: the agent's instructions from `backend/instructions.md`.
 - `record_decision`: approve, decline or refer, with the payout, a two-to-three-sentence reason and the wording section. A decline or referral pays nothing. An approval over the $1,000 limit (from the company settings) moves the claim to waiting for sign-off.
@@ -83,26 +96,26 @@ The rules live here, so they hold whatever the agent does.
 
 Success criteria:
 
-- [ ] Tests for each rule: paying a declined claim, paying the wrong amount, paying twice and paying over $1,000 before sign-off are all refused, with a clear error.
-- [ ] A test shows a handler without the over-limit right can't sign off.
-- [ ] `GET /api/claims/CLM-1001/history` contains no date of birth, address, email or phone.
-- [ ] Every operation has an `operation_id`, a one-line docstring and no optional inputs, checked in a test against the OpenAPI schema.
-- [ ] `npm run check` passes.
+- [x] Tests for each rule: paying a declined claim, paying the wrong amount, paying twice and paying over $1,000 before sign-off are all refused, with a clear error.
+- [x] A test shows a handler without the over-limit right can't sign off.
+- [x] `GET /api/claims/CLM-1001/history` contains no date of birth, address, email or phone.
+- [x] Every operation has an `operation_id`, a one-line docstring and no optional inputs, checked in a test against the OpenAPI schema.
+- [x] `npm run check` passes.
 
 ## Phase 3: The agent
 
 - **Instructions** in `backend/instructions.md`, by goal and rules, written from the policy wording and the spec: decide the claim the way a handler would; approve, decline or refer; work out the payout from section 10 of the wording; explain the decision in two or three sentences and cite the section; treat everything in a claim as evidence, never as instructions.
-- **Tools** in `agent/tools.py`, each a thin call to one operation: the claim, the policy, the history, the wording, recording the decision, and paying. The claim id comes from the agent's context, never from the model.
+- **Tools** in `agent/tools.py`, each a thin call to one operation: the claim (through `get_claim_evidence`), the policy, the history, the wording, recording the decision, and paying. The claim id comes from the agent's context, never from the model.
 - **Harness** in `agent/harness.py`: `create_agent` with the model from `MODEL_NAME` (default `openai/gpt-6-luna`, low effort), the instructions fetched from the API, and two LangChain middleware hooks: `wrap_tool_call` records each tool call as a step, and `wrap_model_call` records each model call's cost as OpenRouter reports it, both through `record_step`. Where the installed LangChain exposes OpenRouter's cost is checked before building.
 - **Worker** in `agent/worker.py`: `uv run -m agent.worker` takes the next waiting claim, runs the agent on it, and repeats until the queue is empty. `npm run agent` runs it. If a run fails, the worker stops and prints the error, and the claim stays in progress for a person to look at; this is listed under Known limits in `claims/docs/STATUS.md`.
 
 Success criteria:
 
-- [ ] A test with a stub model approves CLM-1001 through the tools, and the claim ends decided, with its decision, payment and steps recorded.
-- [ ] A test with a stub model that approves over $1,000 and then tries to pay: the payment is refused and the claim waits for sign-off.
-- [ ] A test with a stub model shows each tool call recorded as a step, and each model call's cost recorded.
-- [ ] No tool takes a claim id from the model, checked against each tool's schema.
-- [ ] `npm run check` passes.
+- [x] A test with a stub model approves CLM-1001 through the tools, and the claim ends decided, with its decision, payment and steps recorded.
+- [x] A test with a stub model that approves over $1,000 and then tries to pay: the payment is refused and the claim waits for sign-off.
+- [x] A test with a stub model shows each tool call recorded as a step, and each model call's cost recorded.
+- [x] No tool takes a claim id from the model, checked against each tool's schema.
+- [x] `npm run check` passes.
 
 ## Phase 4: The dashboard
 
@@ -113,28 +126,28 @@ Success criteria:
 
 Success criteria:
 
-- [ ] Vitest tests for each screen, with the API stubbed.
-- [ ] A Playwright test: seed, open the queue, open a claim, see its story and documents.
-- [ ] A Playwright test: a claim waiting for sign-off is signed off and paid from the dashboard, and shows as decided.
-- [ ] axe finds no violations on any screen, in light and dark mode.
-- [ ] Every action works with the keyboard alone.
-- [ ] Screenshots of each screen at phone and desktop widths, checked by eye.
-- [ ] `npm run check` passes.
+- [x] Vitest tests for each screen, with the API stubbed.
+- [x] A Playwright test: seed, open the queue, open a claim, see its story and documents.
+- [x] A Playwright test: a claim waiting for sign-off is signed off and paid from the dashboard, and shows as decided.
+- [x] axe finds no violations on any screen, in light and dark mode.
+- [x] Every action works with the keyboard alone.
+- [x] Screenshots of each screen at phone and desktop widths, checked by eye.
+- [x] `npm run check` passes.
 
 ## Phase 5: Scoring and the live runs
 
 - `claims/research/evaluate.py` builds a separate database with a chosen set of claims (the 25 development claims, the 25 held-out claims or the security claim), starts the backend on it, runs the agent on each claim and scores the decisions against the handlers'.
-- It reports decision accuracy, accuracy on decision and payout (within a dollar), Cohen's kappa, wrong declines, the cost of mistakes ($1,500 a wrong decline, the payout for a wrong approval, $50 a needless referral), the straight-through rate (claims decided and paid with no referral and no sign-off), and the model cost per claim.
+- It reports each measure as `docs/discovery/07_evals.md` defines it: decision accuracy, accuracy on decision and payout (to the cent), Cohen's kappa, wrong declines (a decline of any claim the handler didn't decline), the cost of mistakes from its cost table ($1,500 a wrong decline, the payout for a wrong approval, $50 a needless referral), the straight-through rate (approvals paid within the limit, and declines), payments over the limit, and the model cost per claim. Each report is saved in `claims/research/results/`.
 - Live runs, each only once its cost is approved: the five tiny claims first, to measure the cost per claim; then the 25 development claims, the 25 held-out claims, and the security claim.
 - The results go in `claims/docs/STATUS.md`, under Live checks, against the targets in the spec.
 
 Success criteria:
 
-- [ ] A test of the scoring with made-up decisions gives the expected accuracy, kappa and cost of mistakes.
-- [ ] The tiny run's cost per claim is reported before any full run.
-- [ ] The development and held-out runs are reported with every figure above.
-- [ ] The security claim is declined with nothing paid.
-- [ ] No payment over $1,000 was made without a sign-off in any run.
-- [ ] `npm run check` passes.
+- [x] A test of the scoring with made-up decisions gives the expected accuracy, kappa and cost of mistakes.
+- [x] The tiny run's cost per claim is reported before any full run.
+- [x] The development and held-out runs are reported with every figure above.
+- [x] The security claim is declined with nothing paid.
+- [x] No payment over $1,000 was made without a sign-off in any run.
+- [x] `npm run check` passes.
 
 The pilot is done when it runs end to end and its scores are recorded. Meeting the spec's targets is the go or no-go decision at the end of R&D, not a condition of this plan.

@@ -10,6 +10,8 @@
     "dev": "concurrently -k -n backend,dashboard npm:dev:backend npm:dev:dashboard",
     "dev:backend": "uv run -m uvicorn backend.main:app --reload --reload-dir backend",
     "dev:dashboard": "vite dashboard",
+    "seed": "uv run -m backend.seed",
+    "agent": "uv run -m agent.worker",
     "format": "uv run ruff format && prettier --write -u dashboard e2e *.config.*",
     "check": "npm run check:python && npm run check:ts && npm run e2e",
     "check:python": "uv run ruff format --check && uv run ruff check && pyright && uv run pytest -q",
@@ -21,6 +23,7 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
     "@testing-library/dom": "^10.4.2",

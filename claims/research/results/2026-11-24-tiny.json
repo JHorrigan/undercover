@@ -1,0 +1,51 @@
+{
+  "set": "tiny",
+  "scores": {
+    "claims": 5,
+    "decision_accuracy": 0.8,
+    "accuracy": 0.8,
+    "kappa": 0.6875000000000001,
+    "wrong_declines": 0,
+    "cost_of_mistakes": 50.0,
+    "straight_through_rate": 0.6,
+    "paid_over_limit": 0,
+    "model_cost_per_claim": 0.000710845
+  },
+  "results": [
+    {
+      "claim_id": "CLM-1007",
+      "decision": "approve",
+      "payout": 50.0,
+      "paid": true,
+      "cost": 0.0006933849999999999
+    },
+    {
+      "claim_id": "CLM-1015",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000645775
+    },
+    {
+      "claim_id": "CLM-1017",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000651215
+    },
+    {
+      "claim_id": "CLM-1020",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000742185
+    },
+    {
+      "claim_id": "CLM-1021",
+      "decision": "approve",
+      "payout": 825.0,
+      "paid": true,
+      "cost": 0.000821665
+    }
+  ]
+}

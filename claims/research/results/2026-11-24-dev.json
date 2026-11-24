@@ -1,0 +1,191 @@
+{
+  "set": "dev",
+  "scores": {
+    "claims": 25,
+    "decision_accuracy": 0.72,
+    "accuracy": 0.64,
+    "kappa": 0.5138888888888888,
+    "wrong_declines": 1,
+    "cost_of_mistakes": 2261.0,
+    "straight_through_rate": 0.72,
+    "paid_over_limit": 0,
+    "model_cost_per_claim": 0.0006551696
+  },
+  "results": [
+    {
+      "claim_id": "CLM-1001",
+      "decision": "approve",
+      "payout": 420.0,
+      "paid": true,
+      "cost": 0.00077406
+    },
+    {
+      "claim_id": "CLM-1002",
+      "decision": "approve",
+      "payout": 580.0,
+      "paid": true,
+      "cost": 0.0008079999999999999
+    },
+    {
+      "claim_id": "CLM-1003",
+      "decision": "approve",
+      "payout": 3750.0,
+      "paid": false,
+      "cost": 0.00069456
+    },
+    {
+      "claim_id": "CLM-1004",
+      "decision": "approve",
+      "payout": 74.0,
+      "paid": true,
+      "cost": 0.000734485
+    },
+    {
+      "claim_id": "CLM-1005",
+      "decision": "approve",
+      "payout": 243.0,
+      "paid": true,
+      "cost": 0.000744975
+    },
+    {
+      "claim_id": "CLM-1006",
+      "decision": "approve",
+      "payout": 425.0,
+      "paid": true,
+      "cost": 0.0007289250000000001
+    },
+    {
+      "claim_id": "CLM-1007",
+      "decision": "approve",
+      "payout": 50.0,
+      "paid": true,
+      "cost": 0.000332245
+    },
+    {
+      "claim_id": "CLM-1008",
+      "decision": "approve",
+      "payout": 2240.0,
+      "paid": false,
+      "cost": 0.0007746
+    },
+    {
+      "claim_id": "CLM-1009",
+      "decision": "approve",
+      "payout": 930.0,
+      "paid": true,
+      "cost": 0.00071819
+    },
+    {
+      "claim_id": "CLM-1010",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00075561
+    },
+    {
+      "claim_id": "CLM-1011",
+      "decision": "approve",
+      "payout": 810.0,
+      "paid": true,
+      "cost": 0.00085312
+    },
+    {
+      "claim_id": "CLM-1012",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00068908
+    },
+    {
+      "claim_id": "CLM-1013",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000646305
+    },
+    {
+      "claim_id": "CLM-1014",
+      "decision": "approve",
+      "payout": 605.0,
+      "paid": true,
+      "cost": 0.000795365
+    },
+    {
+      "claim_id": "CLM-1015",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00023875
+    },
+    {
+      "claim_id": "CLM-1016",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000794455
+    },
+    {
+      "claim_id": "CLM-1017",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00026988
+    },
+    {
+      "claim_id": "CLM-1018",
+      "decision": "approve",
+      "payout": 330.0,
+      "paid": true,
+      "cost": 0.0007171
+    },
+    {
+      "claim_id": "CLM-1019",
+      "decision": "approve",
+      "payout": 210.0,
+      "paid": true,
+      "cost": 0.00073791
+    },
+    {
+      "claim_id": "CLM-1020",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000292445
+    },
+    {
+      "claim_id": "CLM-1021",
+      "decision": "approve",
+      "payout": 825.0,
+      "paid": true,
+      "cost": 0.000376745
+    },
+    {
+      "claim_id": "CLM-1022",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.0007522550000000001
+    },
+    {
+      "claim_id": "CLM-1023",
+      "decision": "refer",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.000681955
+    },
+    {
+      "claim_id": "CLM-1024",
+      "decision": "decline",
+      "payout": 0.0,
+      "paid": false,
+      "cost": 0.00070945
+    },
+    {
+      "claim_id": "CLM-1025",
+      "decision": "approve",
+      "payout": 71.0,
+      "paid": true,
+      "cost": 0.000758775
+    }
+  ]
+}
