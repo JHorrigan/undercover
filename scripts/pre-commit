@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-# Runs the fast checks before each commit. Installed by scripts/install-hooks.sh.
-exec scripts/check.sh --fast

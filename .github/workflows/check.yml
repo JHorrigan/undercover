@@ -21,13 +21,10 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      - run: corepack enable pnpm
-      - name: Install each web app and the browser for its tests
+      - name: Install the Node packages and the browser for the tests
         run: |
-          for dir in */web; do
-            [ -f "$dir/package.json" ] || continue
-            (cd "$dir" && pnpm install --frozen-lockfile && pnpm exec playwright install --with-deps chromium)
-          done
+          npm ci
+          npx playwright install --with-deps chromium
       - run: scripts/check.sh
 
 # Deploys: two jobs per app, dev and production, each calling deploy.yml.

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-<TBD: the app in one line: what it does, and which folders it has, such as its agent in `agent/`, its API in `api/`, its pages in `web/` and its R&D in `research/`.>
+<TBD: the app in one line: what it does, and which folders it has, such as its R&D in `research/` and its code in the root's `backend/`, `agent/` and `dashboard/`.>
 
 ## Start here
 

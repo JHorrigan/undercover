@@ -60,3 +60,6 @@ Thumbs.db
 
 # Throwaway design prototypes
 .prototypes/
+
+# Jupyter
+.ipynb_checkpoints/
