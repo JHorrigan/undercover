@@ -1,6 +1,6 @@
 # Discovery
 
-What we found, before anything is built. Written once for the client, before any app's `SPEC.md`. Each use case that is chosen becomes an app, and its spec is agreed from this.
+What we found, before anything is built. Written once, before any app's `SPEC.md`. Each use case that is chosen becomes an app, and its spec is agreed from this.
 
 Discovery ran from 9 to 20 November 2026. The full record, step by step, is in `docs/discovery/`. It is a worked example: UnderCover is fictional, and the meetings and most figures are invented.
 
@@ -43,7 +43,7 @@ Each use case is ranked with ICE and named as one of three kinds:
 - **Acceleration**: do things faster.
 - **Differentiation**: do different things.
 
-Each one is tested: does it solve a measurable problem, does it use the client's own data and systems, and can its benefit be measured? First ask whether it can be solved without an agent, or without an LLM at all.
+Each one is tested: does it solve a measurable problem, does it use UnderCover's own data and systems, and can its benefit be measured? First ask whether it can be solved without an agent, or without an LLM at all.
 
 From `docs/discovery/06_use_cases.md`.
 

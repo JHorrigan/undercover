@@ -43,7 +43,7 @@ The agent must never see any of these answers. They live apart from the queue, a
 
 ## Tags
 
-With the senior handler, XPLORATECH tagged each decision so failures can be grouped:
+With the senior handler, the forward deployed engineer tagged each decision so failures can be grouped:
 
 - `tests`: what the claim checks, in one line.
 - `difficulty`: `routine`, `hard` (the wording settles it, but it takes care) or `manual` (it needs the claims manual or the customer's history, listed in `needs`).

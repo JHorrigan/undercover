@@ -51,7 +51,7 @@ So that AI answer engines, such as ChatGPT and Google's AI answers, can read the
 ## Security
 
 - HTTPS only, with security headers: a content security policy, HSTS and the rest of the usual set. A static, cached site allows inline scripts in its policy, since a per-request nonce would make every page render on a Lambda for each visit; the policy locks everything else to the site itself. HSTS starts as `max-age` only: `includeSubDomains` and `preload` commit the whole domain, so they wait for James.
-- Every stage but production sends `noindex` and a disallow-all `robots.txt`, and asks for a password before anything loads. A stage may have its own address under the company domain, such as `dev.xploratech.ai`, so it works the same as production (James, 1 November 2026).
+- Every stage but production sends `noindex` and a disallow-all `robots.txt`, and asks for a password before anything loads. A stage may have its own address under the production domain, such as `dev.example.com`, so it works the same as production (James, 1 November 2026).
 - Forms are protected against spam and abuse.
 - Emails the site sends pass SPF, DKIM and DMARC, so they are not marked as spam.
 - No secrets in the front end.

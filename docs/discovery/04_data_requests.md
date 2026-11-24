@@ -19,7 +19,7 @@ Each request names the system, the owner and the format, so the data can be trac
 On 10 November, before any data was sent, the Head of IT and the Data Governance Lead agreed how data would be handled during discovery and R&D:
 
 - Customer names, contact details, dates of birth and addresses are replaced with realistic invented ones before export. Claim stories and medical details are kept, because the decisions depend on them.
-- The data stays in UnderCover's own AWS account and the repo it owns. Nothing is copied to XPLORATECH's systems.
+- The data stays in UnderCover's own AWS account and the repo it owns. Nothing is copied anywhere else.
 - Section 11 of the claims manual applies: a customer's data is used only to decide that customer's claims.
 
 ## The requests
